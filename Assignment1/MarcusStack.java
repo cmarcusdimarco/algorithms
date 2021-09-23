@@ -27,7 +27,7 @@ public class MarcusStack {
 
     // Pops a node off the top of the stack
     public MarcusNode pop() {
-        private MarcusNode returnNode = this.head;
+        MarcusNode returnNode = this.head;
         if (this.isEmpty()) {           // Checks if stack is empty before accessing head.next
             return returnNode;
         } else {
