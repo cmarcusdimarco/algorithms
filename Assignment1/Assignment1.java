@@ -16,9 +16,9 @@ class Assignment1 {
     }
 
     public static void main(String[] args) {
-        MarcusStack stack = new MarcusStack();          // Stack for testing Strings for palindromes
-        MarcusQueue queue = new MarcusQueue();          // Queue for testing Strings for palindromes
-        MarcusQueue masterQueue = new MarcusQueue();    // Queue to contain all Strings from File
+        MarcusStack stack = new MarcusStack();          // Stack for testing palindromes
+        MarcusQueue queue = new MarcusQueue();          // Queue for testing palindromes
+        MarcusQueue masterQueue = new MarcusQueue();    // For Strings from File
 
         // Try/catch block for file import and reading
         try {
@@ -37,11 +37,11 @@ class Assignment1 {
         // Iterate through list
         while (!masterQueue.isEmpty()) {
             String string = masterQueue.dequeue().getItem();    // Original String
-            String lowercase = onlyLettersToLowercase(string);  // Parsed for lowercase and no special characters
-            String forwardsString = "";                         // Parsed String read forwards
-            String backwardsString = "";                        // Parsed String read backwards
+            String lowercase = onlyLettersToLowercase(string);  // Parsed
+            String forwardsString = "";
+            String backwardsString = "";
 
-            // Load a stack and a queue with the lowercase parsed String, 1 character at a time
+            // Load a stack and a queue with the lowercase parsed String by character
             for (int i = 0; i < lowercase.length(); i++) {
                 MarcusNode stackNode = new MarcusNode(lowercase.substring(i, i + 1));
                 MarcusNode queueNode = new MarcusNode(lowercase.substring(i, i + 1));
@@ -55,7 +55,7 @@ class Assignment1 {
                 backwardsString += stack.pop().getItem();
             }
 
-            // Compare forwards and backwards for equality and print original if equal
+            // Compare forwards and backwards for equality, print original if equal
             if (forwardsString.equals(backwardsString)) {
                 System.out.println(string);
             }
