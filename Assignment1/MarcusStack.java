@@ -21,14 +21,14 @@ public class MarcusStack {
     
     // Pushes a node on top of the stack
     public void push(MarcusNode node) {
-        node.setNext(this.head);        // Will set null if stack is empty
+        node.setNext(this.head);    // Will set null if stack is empty
         this.head = node;
     }
 
     // Pops a node off the top of the stack
     public MarcusNode pop() {
         MarcusNode returnNode = this.head;
-        if (this.isEmpty()) {           // Checks if stack is empty before accessing head.next
+        if (this.isEmpty()) {       // Catch stack underflow
             return returnNode;
         } else {
             this.head = head.getNext();
