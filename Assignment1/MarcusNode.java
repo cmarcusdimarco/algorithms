@@ -1,6 +1,6 @@
 /**
- * Custom Node class which will serve as the container for individual
- * characters from the strings to be tested.
+ * Custom Node class which will serve as the container for
+ * individual characters from the strings to be tested.
  * Must point to another Node object or null.
  */
 public class MarcusNode {
