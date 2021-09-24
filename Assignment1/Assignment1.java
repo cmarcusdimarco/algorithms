@@ -9,9 +9,11 @@ import java.util.Scanner;
 
 class Assignment1 {
     public static void main(String[] args) {
-        File magicItems = new File("magicitems.txt");
         try {
-            Scanner read = new Scanner(magicItems);
+            File file = new File("./Assignment1/magicitems.txt");
+            Scanner read = new Scanner(file);
+            System.out.println(read.nextLine());
+            read.close();
         } catch (FileNotFoundException e) {
             System.out.println("Whoops! Couldn't find magicitems.txt");
             e.printStackTrace();
