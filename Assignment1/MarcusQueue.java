@@ -43,11 +43,11 @@ public class MarcusQueue {
     // Dequeues a node from the front of the queue
     public MarcusNode dequeue() {
         MarcusNode returnNode = this.head;
-        if (this.isEmpty()) {             // First call to isEmpty checks for stack underflow
+        if (this.isEmpty()) {       // Checks for stack underflow
             return returnNode;
         } else {
             this.head = returnNode.getNext();
-            if (this.isEmpty()) {         // Second call to isEmpty checks if tail needs to be assigned null
+            if (this.isEmpty()) {   // Checks if tail needs to be assigned null
                 this.tail = null;
             }
             return returnNode;
