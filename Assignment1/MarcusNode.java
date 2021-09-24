@@ -11,8 +11,6 @@ public class MarcusNode {
     public MarcusNode(String item) {
         this.item = item;
         this.next = null;
-        // Idea: control input with a method which combines toLowercase and replaceAll for readability
-        // Second idea: don't do that - preserve original input and format output based on requirements
     }
 
     public MarcusNode(String item, MarcusNode next) {
