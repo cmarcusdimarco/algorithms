@@ -9,10 +9,16 @@ import java.util.Scanner;
 
 class Assignment1 {
     public static void main(String[] args) {
+        MarcusStack stack = new MarcusStack();
+        MarcusQueue queue = new MarcusQueue();
+
         try {
             File file = new File("./Assignment1/magicitems.txt");
             Scanner read = new Scanner(file);
-            System.out.println(read.nextLine());
+            while (read.hasNextLine()) {
+                MarcusNode item = new MarcusNode(read.nextLine());
+                queue.enqueue(item);
+            }
             read.close();
         } catch (FileNotFoundException e) {
             System.out.println("Whoops! Couldn't find magicitems.txt");
