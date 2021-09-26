@@ -22,7 +22,7 @@ class Assignment1 {
 
         // Try/catch block for file import and reading
         try {
-            File file = new File("./Assignment1/magicitems.txt");
+            File file = new File("magicitems.txt");
             Scanner read = new Scanner(file);
             while (read.hasNextLine()) {
                 MarcusNode item = new MarcusNode(read.nextLine());
