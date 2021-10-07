@@ -10,8 +10,9 @@ import java.util.Scanner;
 
 public class Assignment2 {
     public static void main(String[] args) {
-        final int NUM_OF_ITEMS = 666;
-        String[] magicItems = new String[NUM_OF_ITEMS];
+        final int NUM_OF_ITEMS = 666;                   // Length of file as constant
+        String[] magicItems = new String[NUM_OF_ITEMS]; // Array of file strings
+        MarcusSort sorter = new MarcusSort();           // Instance of MarcusSort
 
         // Try/catch block for file import and reading
         try {
@@ -35,5 +36,10 @@ public class Assignment2 {
         // Sort using merge sort, print comparisons
 
         // Sort using quicksort, print comparisons
+
+        sorter.selectionSort(magicItems);
+        for (String each : magicItems) {
+            System.out.println(each);
+        }
     }
 }
