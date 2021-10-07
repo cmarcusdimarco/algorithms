@@ -38,8 +38,18 @@ public class MarcusSort {
         return strings;
     }
 
-    public void insertionSort() {
+    // Insertion sort will sort the array from index 0 through i,
+    // 'inserting' each value into its correct position.
+    public String[] insertionSort(String[] strings) {
 
+        // Start with counter at 0
+        this.resetCounter();
+
+        // Start comparisons at index 1
+        for (int i = 1; i < strings.length; i++) {
+            
+        }
+        return strings;
     }
 
     public void mergeSort() {
