@@ -5,7 +5,11 @@
 
 public class MarcusSort {
     
-    private int counter = 0;    // Count number of comparisons
+    private int counter;    // Count number of comparisons
+
+    public MarcusSort() {   // Default constructor
+        counter = 0;
+    }
 
     // Selection sort will search for minimum unsorted value and
     // place it at first unsorted index.
