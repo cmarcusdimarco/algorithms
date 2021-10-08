@@ -20,10 +20,11 @@ public class MarcusSort {
 
         // First unsorted index through each pass is i
         for (int i = 0; i < strings.length; i++) {
+            counter++;          // Comparison in for loop
             int minIndex = i;
             // Find index of smallest value in remainder of array
             for (int j = i + 1; j < strings.length; j++) {
-                counter++;  // Increment for each comparison
+                counter += 2;   // Comparisons in for loop and if statement
                 if (strings[minIndex].compareToIgnoreCase(strings[j]) > 0) {
                     minIndex = j;
                 }
@@ -47,8 +48,27 @@ public class MarcusSort {
 
         // Start comparisons at index 1
         for (int i = 1; i < strings.length; i++) {
-            
+            counter++;      // Comparison in outer loop
+            String keyString = strings[i];
+            for (int j = i - 1; j >= 0; j--) {
+                counter += 2;   // Inner loop and if statement
+                // Move all items larger than key forward 1 index
+                if (keyString.compareToIgnoreCase(strings[j]) < 0) {
+                    strings[j + 1] = strings[j];
+                    counter++;  // Second comparison in if statement
+                    // If index 0 reached, assign it currentString
+                    if (j == 0) {
+                        strings[j] = keyString;
+                    }
+                } else {
+                    // Insert key at index ahead of first smaller element
+                    strings[j + 1] = keyString;
+                    break;
+                }
+            }
         }
+        // Print completion message with number of comparisons
+        this.printCompletionMessage();
         return strings;
     }
 
@@ -72,6 +92,7 @@ public class MarcusSort {
 
     // Message to print upon completing sort which includes counter
     public void printCompletionMessage() {
-        System.out.println("Sort complete! Number of comparisons: " + counter);
+        System.out.println("Sort complete! Number of comparisons: "
+                           + counter);
     }
 }
