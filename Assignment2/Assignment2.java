@@ -16,7 +16,7 @@ public class Assignment2 {
 
         // Try/catch block for file import and reading
         try {
-            File file = new File("magicitems.txt");
+            File file = new File("Assignment2/magicitems.txt");
             Scanner read = new Scanner(file);
             for (int i = 0; i < NUM_OF_ITEMS; i++) {
                 magicItems[i] = read.nextLine();
@@ -37,9 +37,9 @@ public class Assignment2 {
 
         // Sort using quicksort, print comparisons
 
-        sorter.selectionSort(magicItems);
-        for (String each : magicItems) {
-            System.out.println(each);
-        }
+        sorter.insertionSort(magicItems);
+         for (String each : magicItems) {
+             System.out.println(each);
+         }
     }
 }
