@@ -72,8 +72,41 @@ public class MarcusSort {
         return strings;
     }
 
-    public void mergeSort() {
+    /**
+     * mergeSort() is an abstraction for cleaner user interaction. It will reset
+     * the counter, call the recursive merge function, and then print the completion
+     * message with the number of comparisons.
+     * @param strings
+     * @return String[]
+     */
+    public String[] mergeSort(String[] strings) {
 
+        // Start with counter at 0
+        this.resetCounter();
+
+        // Nest recursive function inside for readability and proper
+        // counter/print calls
+        this.merge(strings);
+
+        // Print completion message with number of comparisons
+        this.printCompletionMessage();
+        return strings;
+    }
+
+    // Merge sort will divide the array recursively until subarrays are
+    // of size 1, then merge the subarrays together in sorted order
+
+    private String[] merge(String[] strings) {
+        
+        // Base case
+        if (strings.length == 1) {
+            return strings;
+        } else {
+            int midpoint = strings.length / 2;
+            String[] stringsL = new String[midpoint];
+            String[] stringsR = new String[strings.length - midpoint];
+            
+        }
     }
 
     public void quickSort() {
