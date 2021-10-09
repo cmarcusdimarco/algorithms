@@ -37,9 +37,10 @@ public class Assignment2 {
 
         // Sort using quicksort, print comparisons
 
-        sorter.mergeSort(magicItems);
+        int i = 1;
+        sorter.quickSort(magicItems);
          for (String each : magicItems) {
-             System.out.println(each);
+             System.out.println(each + " " + i++);
          }
     }
 }
