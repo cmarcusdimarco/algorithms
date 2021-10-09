@@ -13,7 +13,7 @@ public class MarcusSort {
 
     // Selection sort will search for minimum unsorted value and
     // place it at first unsorted index.
-    public String[] selectionSort(String[] strings) {
+    public void selectionSort(String[] strings) {
 
         // Start with counter at 0
         this.resetCounter();
@@ -40,12 +40,11 @@ public class MarcusSort {
 
         // Print completion message with number of comparisons
         this.printCompletionMessage();
-        return strings;
     }
 
     // Insertion sort will sort the array from index 0 through i,
     // 'inserting' each value into its correct position.
-    public String[] insertionSort(String[] strings) {
+    public void insertionSort(String[] strings) {
 
         // Start with counter at 0
         this.resetCounter();
@@ -76,7 +75,6 @@ public class MarcusSort {
 
         // Print completion message with number of comparisons
         this.printCompletionMessage();
-        return strings;
     }
 
     /**
@@ -86,70 +84,77 @@ public class MarcusSort {
      * @param strings
      * @return String[]
      */
-    public String[] mergeSort(String[] strings) {
+    public void mergeSort(String[] strings) {
 
         // Start with counter at 0
         this.resetCounter();
 
         // Nest recursive function inside for readability and proper
         // counter/print calls
-        String[] returnStrings = this.merge(strings);
+        this.sortThenMerge(strings, 0, strings.length - 1);
 
         // Print completion message with number of comparisons
         this.printCompletionMessage();
-        return returnStrings;
     }
 
     // Merge sort will divide the array recursively until subarrays are
-    // of size 1, then merge the subarrays together in sorted order
-
-    private String[] merge(String[] strings) {
+    // of size 1, then merge the subarrays together in sorted order.
+    private void sortThenMerge(String[] strings, int leftIndex, int rightIndex) {
         
-        // Base case
-        counter++;
-        if (strings.length == 1) {
-            return strings;
-        } else {
-            int midpoint = strings.length / 2;
-            String[] stringsL = new String[midpoint];
-            String[] stringsR = new String[strings.length - midpoint];
-            String[] returnStrings = new String[strings.length];
-            
-            for (int i = 0; i < stringsL.length; i++) {
-                counter++;
-                stringsL[i] = strings[i];
-            }
-            counter++;
+        counter++;      // Increment the if comparison
+        if (leftIndex < rightIndex) {
+            int midpoint = (leftIndex + rightIndex) / 2;
+            sortThenMerge(strings, leftIndex, midpoint);
+            sortThenMerge(strings, midpoint + 1, rightIndex);
+            merge(strings, leftIndex, midpoint, rightIndex);
+        }
+    }
 
-            for (int j = 0; j < stringsR.length; j++) {
-                counter++;
-                stringsR[j] = strings[midpoint + j];
-            }
-            counter++;
-            
-            merge(stringsL);
-            merge(stringsR);
+    // Merge will take an array, create two sorted subarrays, and
+    // sort the elements in place.
+    private void merge(String[] strings, int leftIndex, int midpoint,
+                       int rightIndex) {
 
-            int i = 0;
-            int j = 0;
-            int k = 0;
-            while (i < stringsL.length && j < stringsR.length) {
-                if (stringsL[i].compareToIgnoreCase(stringsR[j]) < 0) {
-                    returnStrings[k++] = stringsL[i++];
-                } else {
-                    returnStrings[k++] = stringsR[j++];
-                }
-            }
-            if (i == stringsL.length) {
-                for ( ; k < returnStrings.length; k++) {
-                    returnStrings[k] = stringsR[j++];
-                }
+        // Create two (sorted, due to recursion) subarrays
+        String[] stringsL = new String[midpoint - leftIndex + 1];
+        String[] stringsR = new String[rightIndex - midpoint];
+        
+        // Populate the subarrays, incrementing for each comparison
+        for (int i = 0; i < stringsL.length; i++) {
+            counter++;
+            stringsL[i] = strings[leftIndex + i];
+        }
+        counter++;      // Increment the loop exit comparison
+
+        for (int j = 0; j < stringsR.length; j++) {
+            counter++;
+            stringsR[j] = strings[midpoint + j + 1];
+        }
+        counter++;      // Increment the loop exit comparison
+
+        int i = 0;
+        int j = 0;
+        int k = leftIndex;
+        while (i < stringsL.length && j < stringsR.length) {
+            counter += 2;   // Increment for loop and if statements
+            if (stringsL[i].compareToIgnoreCase(stringsR[j]) < 0) {
+                strings[k++] = stringsL[i++];
             } else {
-                for ( ; k < returnStrings.length; k++) {
-                    returnStrings[k] = stringsL[i++];
-                }
+                strings[k++] = stringsR[j++];
             }
-            return returnStrings;
+        }
+        if (i == stringsL.length) {
+            for ( ; k <= rightIndex; k++) {
+                counter++;
+                strings[k] = stringsR[j++];
+            }
+            counter += 2;   // Increment for loop exit and if
+        } else {
+            for ( ; k <= rightIndex; k++) {
+                counter++;
+                strings[k] = stringsL[i++];
+            }
+            counter += 2;   // Increment for loop exit and if
         }
     }
 

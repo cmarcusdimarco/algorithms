@@ -37,8 +37,8 @@ public class Assignment2 {
 
         // Sort using quicksort, print comparisons
 
-        String[] result = sorter.mergeSort(magicItems);
-         for (String each : result) {
+        sorter.mergeSort(magicItems);
+         for (String each : magicItems) {
              System.out.println(each);
          }
     }
