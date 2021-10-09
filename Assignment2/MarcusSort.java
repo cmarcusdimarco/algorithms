@@ -79,8 +79,8 @@ public class MarcusSort {
 
     /**
      * mergeSort() is an abstraction for cleaner user interaction. It will reset
-     * the counter, call the recursive merge function, and then print the completion
-     * message with the number of comparisons.
+     * the counter, call the recursive merge function, and then print the
+     * completion message with the number of comparisons.
      * @param strings
      */
     public void mergeSort(String[] strings) {
