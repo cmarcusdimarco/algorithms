@@ -82,7 +82,6 @@ public class MarcusSort {
      * the counter, call the recursive merge function, and then print the completion
      * message with the number of comparisons.
      * @param strings
-     * @return String[]
      */
     public void mergeSort(String[] strings) {
 
@@ -158,8 +157,62 @@ public class MarcusSort {
         }
     }
 
-    public void quickSort() {
+    /**
+     * quickSort() is an abstraction for cleaner user interaction. It will reset
+     * the counter, call the recursive quicksort function, and print the
+     * completion message with the number of comparisons.
+     * @param strings
+     */
+    public void quickSort(String[] strings) {
 
+        // Set counter to 0
+        this.resetCounter();
+
+        // Nest recursive function inside for readability and proper
+        // counter/print calls
+        this.quickSort(strings, 0, strings.length - 1);
+
+        // Print completion message with number of comparisons
+        this.printCompletionMessage();
+    }
+
+    // Quicksort will take an array and recursively divide it around
+    // a pivot value, sorting the elements around the pivots
+    private void quickSort(String[] strings, int leftIndex, int rightIndex) {
+
+        counter++;      // Increment for if comparison
+        if (leftIndex < rightIndex) {
+            // Quicksort the elements to either side of the partition
+            int partition = partition(strings, leftIndex, rightIndex);
+            quickSort(strings, leftIndex, partition - 1);
+            quickSort(strings, partition + 1, rightIndex);
+        }
+    }
+
+    // Partitions an array around a pivot value and places all values
+    // smaller than the pivot to its left, then places pivot at its sorted index
+    private int partition(String[] strings, int leftIndex, int rightIndex) {
+
+        String pivotString = strings[rightIndex];
+
+        int sortedIndex = leftIndex;
+
+        for (int i = leftIndex; i <= rightIndex; i++) {
+            counter += 2;       // Increment for loop and if statement
+            if (strings[i].compareToIgnoreCase(pivotString) < 0) {
+                // If element at i is smaller than pivot, place in the
+                // left half of the array
+                String tempString = strings[sortedIndex];
+                strings[sortedIndex++] = strings[i];
+                strings[i] = tempString;
+            }
+        }
+        counter++;      // Increment for loop exit comparison
+
+        // Swap pivot string and value at the pivot's sorted index
+        strings[rightIndex] = strings[sortedIndex];
+        strings[sortedIndex] = pivotString;
+        return sortedIndex;
     }
 
     // Getter for counter
