@@ -215,6 +215,24 @@ public class MarcusSort {
         return sortedIndex;
     }
 
+    // Shuffle routine based on the Knuth or Fisher-Yates, but not
+    // Rosanna, shuffle
+    public void notRosannaShuffle(String[] strings) {
+
+        for (int i = strings.length - 1; i >= 0; i--) {
+            // Get random index in the remaining length
+            int randomIndex = (int) Math.floor(Math.random() * i);
+            if (randomIndex == i) {
+                continue;
+            } else {
+                // If the random index is not i, swap their values
+                String tempString = strings[i];
+                strings[i] = strings[randomIndex];
+                strings[randomIndex] = tempString;
+            }
+        }
+    }
+
     // Getter for counter
     public int getCounter() {
         return counter;
