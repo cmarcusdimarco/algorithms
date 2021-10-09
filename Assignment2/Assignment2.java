@@ -16,7 +16,7 @@ public class Assignment2 {
 
         // Try/catch block for file import and reading
         try {
-            File file = new File("Assignment2/magicitems.txt");
+            File file = new File("magicitems.txt");
             Scanner read = new Scanner(file);
             for (int i = 0; i < NUM_OF_ITEMS; i++) {
                 magicItems[i] = read.nextLine();
