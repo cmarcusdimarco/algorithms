@@ -134,6 +134,7 @@ public class MarcusSort {
         int i = 0;
         int j = 0;
         int k = leftIndex;
+        // For the selected range, sort until one subarray is exhausted
         while (i < stringsL.length && j < stringsR.length) {
             counter += 2;   // Increment for loop and if statements
             if (stringsL[i].compareToIgnoreCase(stringsR[j]) < 0) {
@@ -142,6 +143,7 @@ public class MarcusSort {
                 strings[k++] = stringsR[j++];
             }
         }
+        // Append the remaining (sorted) subarray
         if (i == stringsL.length) {
             for ( ; k <= rightIndex; k++) {
                 counter++;
