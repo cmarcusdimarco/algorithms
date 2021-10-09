@@ -29,11 +29,15 @@ public class MarcusSort {
                     minIndex = j;
                 }
             }
+            counter++;          // Comparison for inner loop termination
+
             // Swap indices minIndex and i
             String temp = strings[i];
             strings[i] = strings[minIndex];
             strings[minIndex] = temp;
         }
+        counter++;              // Comparison for outer loop termination
+
         // Print completion message with number of comparisons
         this.printCompletionMessage();
         return strings;
@@ -66,7 +70,10 @@ public class MarcusSort {
                     break;
                 }
             }
+            counter++;      // Comparison for inner loop termination
         }
+        counter++;          // Comparison for outer loop termination
+
         // Print completion message with number of comparisons
         this.printCompletionMessage();
         return strings;
@@ -86,11 +93,11 @@ public class MarcusSort {
 
         // Nest recursive function inside for readability and proper
         // counter/print calls
-        this.merge(strings);
+        String[] returnStrings = this.merge(strings);
 
         // Print completion message with number of comparisons
         this.printCompletionMessage();
-        return strings;
+        return returnStrings;
     }
 
     // Merge sort will divide the array recursively until subarrays are
@@ -99,13 +106,50 @@ public class MarcusSort {
     private String[] merge(String[] strings) {
         
         // Base case
+        counter++;
         if (strings.length == 1) {
             return strings;
         } else {
             int midpoint = strings.length / 2;
             String[] stringsL = new String[midpoint];
             String[] stringsR = new String[strings.length - midpoint];
+            String[] returnStrings = new String[strings.length];
             
+            for (int i = 0; i < stringsL.length; i++) {
+                counter++;
+                stringsL[i] = strings[i];
+            }
+            counter++;
+
+            for (int j = 0; j < stringsR.length; j++) {
+                counter++;
+                stringsR[j] = strings[midpoint + j];
+            }
+            counter++;
+            
+            merge(stringsL);
+            merge(stringsR);
+
+            int i = 0;
+            int j = 0;
+            int k = 0;
+            while (i < stringsL.length && j < stringsR.length) {
+                if (stringsL[i].compareToIgnoreCase(stringsR[j]) < 0) {
+                    returnStrings[k++] = stringsL[i++];
+                } else {
+                    returnStrings[k++] = stringsR[j++];
+                }
+            }
+            if (i == stringsL.length) {
+                for ( ; k < returnStrings.length; k++) {
+                    returnStrings[k] = stringsR[j++];
+                }
+            } else {
+                for ( ; k < returnStrings.length; k++) {
+                    returnStrings[k] = stringsL[i++];
+                }
+            }
+            return returnStrings;
         }
     }
 
