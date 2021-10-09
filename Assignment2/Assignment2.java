@@ -28,19 +28,25 @@ public class Assignment2 {
         }
 
         // Shuffle array before beginning sorts
+        sorter.notRosannaShuffle(magicItems);
 
-        // Sort using selection sort, print comparisons
+        // Create second array to store the shuffle
+        String[] magicItemsShuffled = new String[NUM_OF_ITEMS];
+        System.arraycopy(magicItems, 0, magicItemsShuffled, 0, NUM_OF_ITEMS);
 
-        // Sort using insertion sort, print comparisons
+        // Sort using selection sort, print comparisons, reset shuffle
+        sorter.selectionSort(magicItems);
+        System.arraycopy(magicItemsShuffled, 0, magicItems, 0, NUM_OF_ITEMS);
 
-        // Sort using merge sort, print comparisons
+        // Sort using insertion sort, print comparisons, reset shuffle
+        sorter.insertionSort(magicItems);
+        System.arraycopy(magicItemsShuffled, 0, magicItems, 0, NUM_OF_ITEMS);
+
+        // Sort using merge sort, print comparisons, reset shuffle
+        sorter.mergeSort(magicItems);
+        System.arraycopy(magicItemsShuffled, 0, magicItems, 0, NUM_OF_ITEMS);
 
         // Sort using quicksort, print comparisons
-
-        int i = 1;
         sorter.quickSort(magicItems);
-         for (String each : magicItems) {
-             System.out.println(each + " " + i++);
-         }
     }
 }
