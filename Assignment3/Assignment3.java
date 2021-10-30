@@ -29,6 +29,9 @@ public class Assignment3 {
             e.printStackTrace();
         }
 
+        // Sort magicitems[]
+        sorter.quickSort(magicItems);
+
         // Select 42 items at random from magicitems[]
 
         // Use linear search and print comparisons
