@@ -12,7 +12,26 @@ public class MarcusSearch {
         counter = 0;
     }
     
-    // Linear search
+    // Linear search will search the entire array in order,
+    // halting once the target has been found
+    public void linearSearch(String[] array, String target) {
+
+        // Start with counter at 0
+        this.resetCounter();
+
+        // Search the array in indexed order for the target
+        for (int i = 0; i < array.length; i++) {
+            counter++;
+            // If found, print completion message and break
+            if (array[i].compareToIgnoreCase(target) == 0) {
+                this.printCompletionMessage();
+                break;
+            }
+        }
+
+        // If not found, print message and counter
+        this.printFailureMessage();
+    }
 
     // Binary search
 
@@ -30,5 +49,11 @@ public class MarcusSearch {
     public void printCompletionMessage() {
         System.out.println("Search complete! Number of comparisons: "
                            + counter);
+    }
+
+    // Message to print if search completed without finding target
+    public void printFailureMessage() {
+        System.out.println("Search complete - target not found." +
+                           "\nNumber of comparisons: " + counter);
     }
 }
