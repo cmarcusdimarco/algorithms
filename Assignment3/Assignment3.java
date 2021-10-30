@@ -1,8 +1,10 @@
 /**
  * A program which reads a constant number of Strings
- * from a file and sorts them using various methods,
- * comparing the efficiency of the sorts by
- * printing the number of comparisons for each.
+ * from a file, sorts it using a custom sort library,
+ * then searches for a random 42 items using custom
+ * linear and binary search implementations. Then,
+ * hashes the Strings into a table and retrieves the
+ * 42 items.
  */
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,5 +28,15 @@ public class Assignment3 {
             System.out.println("Whoops! Couldn't find magicitems.txt");
             e.printStackTrace();
         }
+
+        // Select 42 items at random from magicitems[]
+
+        // Use linear search and print comparisons
+
+        // Use binary search and print comparisons
+
+        // Hash magicitems[]
+
+        // Retrieve the 42 items from the hash table, printing comparisons
     }
 }
