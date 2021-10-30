@@ -20,23 +20,20 @@ public class MarcusSort {
 
         // First unsorted index through each pass is i
         for (int i = 0; i < strings.length; i++) {
-            counter++;          // Comparison in for loop
             int minIndex = i;
             // Find index of smallest value in remainder of array
             for (int j = i + 1; j < strings.length; j++) {
-                counter += 2;   // Comparisons in for loop and if statement
+                counter ++;     // Increment 'if' comparison
                 if (strings[minIndex].compareToIgnoreCase(strings[j]) > 0) {
                     minIndex = j;
                 }
             }
-            counter++;          // Comparison for inner loop termination
 
             // Swap indices minIndex and i
             String temp = strings[i];
             strings[i] = strings[minIndex];
             strings[minIndex] = temp;
         }
-        counter++;              // Comparison for outer loop termination
 
         // Print completion message with number of comparisons
         this.printCompletionMessage();
@@ -51,14 +48,12 @@ public class MarcusSort {
 
         // Start comparisons at index 1
         for (int i = 1; i < strings.length; i++) {
-            counter++;      // Comparison in outer loop
             String keyString = strings[i];
             for (int j = i - 1; j >= 0; j--) {
-                counter += 2;   // Inner loop and if statement
+                counter++;      // Comparison in if statement
                 // Move all items larger than key forward 1 index
                 if (keyString.compareToIgnoreCase(strings[j]) < 0) {
                     strings[j + 1] = strings[j];
-                    counter++;  // Second comparison in if statement
                     // If index 0 reached, assign it currentString
                     if (j == 0) {
                         strings[j] = keyString;
@@ -69,9 +64,7 @@ public class MarcusSort {
                     break;
                 }
             }
-            counter++;      // Comparison for inner loop termination
         }
-        counter++;          // Comparison for outer loop termination
 
         // Print completion message with number of comparisons
         this.printCompletionMessage();
@@ -118,25 +111,21 @@ public class MarcusSort {
         String[] stringsL = new String[midpoint - leftIndex + 1];
         String[] stringsR = new String[rightIndex - midpoint];
         
-        // Populate the subarrays, incrementing for each comparison
+        // Populate the subarrays
         for (int i = 0; i < stringsL.length; i++) {
-            counter++;
             stringsL[i] = strings[leftIndex + i];
         }
-        counter++;      // Increment the loop exit comparison
 
         for (int j = 0; j < stringsR.length; j++) {
-            counter++;
             stringsR[j] = strings[midpoint + j + 1];
         }
-        counter++;      // Increment the loop exit comparison
 
         int i = 0;
         int j = 0;
         int k = leftIndex;
         // For the selected range, sort until one subarray is exhausted
         while (i < stringsL.length && j < stringsR.length) {
-            counter += 2;   // Increment for loop and if statements
+            counter ++;     // Increment 'if' statement
             if (stringsL[i].compareToIgnoreCase(stringsR[j]) < 0) {
                 strings[k++] = stringsL[i++];
             } else {
@@ -146,16 +135,12 @@ public class MarcusSort {
         // Append the remaining (sorted) subarray
         if (i == stringsL.length) {
             for ( ; k <= rightIndex; k++) {
-                counter++;
                 strings[k] = stringsR[j++];
             }
-            counter += 2;   // Increment for loop exit and if
         } else {
             for ( ; k <= rightIndex; k++) {
-                counter++;
                 strings[k] = stringsL[i++];
             }
-            counter += 2;   // Increment for loop exit and if
         }
     }
 
@@ -182,7 +167,6 @@ public class MarcusSort {
     // a pivot value, sorting the elements around the pivots
     private void quickSort(String[] strings, int leftIndex, int rightIndex) {
 
-        counter++;      // Increment for if comparison
         if (leftIndex < rightIndex) {
             // Quicksort the elements to either side of the partition
             int partition = partition(strings, leftIndex, rightIndex);
@@ -200,7 +184,7 @@ public class MarcusSort {
         int sortedIndex = leftIndex;
 
         for (int i = leftIndex; i <= rightIndex; i++) {
-            counter += 2;       // Increment for loop and if statement
+            counter ++;         // Increment 'if' statement
             if (strings[i].compareToIgnoreCase(pivotString) < 0) {
                 // If element at i is smaller than pivot, place in the
                 // left half of the array
@@ -209,7 +193,6 @@ public class MarcusSort {
                 strings[i] = tempString;
             }
         }
-        counter++;      // Increment for loop exit comparison
 
         // Swap pivot string and value at the pivot's sorted index
         strings[rightIndex] = strings[sortedIndex];
