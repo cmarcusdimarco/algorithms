@@ -71,7 +71,7 @@ public class MarcusSearch {
                 counter += 2;   // Increment for if and else if
                 return binarySearch(array, leftIndex, midpoint - 1, target);
             } else {
-                counter += 3;   // Increment for if, else if, and else
+                counter += 2;   // Increment for if and else if
                 return binarySearch(array, midpoint + 1, rightIndex, target);
             }
         } else {
