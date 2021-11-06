@@ -90,7 +90,7 @@ public class MarcusSearch {
         counter = 0;
     }
 
-    // Message to print upon completing sort which includes counter
+    // Message to print upon completing search which includes counter
     public void printCompletionMessage() {
         System.out.println("Search complete! Number of comparisons: "
                            + counter);
