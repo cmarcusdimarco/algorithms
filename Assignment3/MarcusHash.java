@@ -40,7 +40,8 @@ public class MarcusHash {
     }
 
     // Add MarcusNode to table
-    public void loadToTable(MarcusNode[] hashTable, MarcusNode node, int hashCode) {
+    public void loadToTable(MarcusNode[] hashTable, MarcusNode node,
+                            int hashCode) {
         // Try/catch block to ensure param @hashCode will fit into param @hashTable
         try {
             if (hashTable[hashCode] == null) {
@@ -49,8 +50,8 @@ public class MarcusHash {
                 chainToTable(hashTable[hashCode], node);
             }
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Whoops! You're passing a hash value greater than the " +
-                               "size of the hash table.");
+            System.out.println("Whoops! You're passing a hash value greater " +
+                               "than the size of the hash table.");
             e.printStackTrace();
         }
     }
