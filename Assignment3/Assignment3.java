@@ -15,6 +15,7 @@ public class Assignment3 {
         final int NUM_OF_ITEMS = 666;                   // Length of file as constant
         String[] magicItems = new String[NUM_OF_ITEMS]; // Array of file strings
         MarcusSort sorter = new MarcusSort();           // Instance of MarcusSort
+        MarcusSearch searcher = new MarcusSearch();     // Instance of MarcusSearch
 
         // Try/catch block for file import and reading
         try {
