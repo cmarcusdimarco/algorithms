@@ -33,7 +33,52 @@ public class MarcusSearch {
         this.printFailureMessage();
     }
 
-    // Binary search
+    // Abstracting binarySearch() for ease-of-use and to ensure
+    // proper counter functionality
+    public void binarySearch(String[] array, String target) {
+
+        // Start with counter at 0
+        this.resetCounter();
+
+        // Private binary search method
+        int indexOfTarget = binarySearch(array, 0, array.length - 1, target);
+
+        // Print message conditional on if target was found
+        if (indexOfTarget == -1) {
+            this.printFailureMessage();
+        } else {
+            this.printCompletionMessage();
+        }
+    }
+
+    /// Binary search will take a midpoint of the sorted array and
+    // compare the target, recursively calling binary search on the
+    // half of the array that would contain the sorted target
+    // until found or a base case is reached.
+    private int binarySearch(String[] array, int leftIndex, int rightIndex, String target) {
+
+        // Check for IndexOutOfBoundsException
+        if (rightIndex >= 1) {
+            int midpoint = (leftIndex + rightIndex - 1) / 2;
+
+            // If the target is at the midpoint index, return the index
+            // If less than the value at midpoint, search the left half
+            // If greater than the value at midpoint, search the upper half
+            if (target.compareToIgnoreCase(array[midpoint]) == 0) {
+                counter++;      // Increment for if
+                return midpoint;
+            } else if (target.compareToIgnoreCase(array[midpoint]) < 0) {
+                counter += 2;   // Increment for if and else if
+                return binarySearch(array, leftIndex, midpoint + 1, target);
+            } else {
+                counter += 3;   // Increment for if, else if, and else
+                return binarySearch(array, midpoint - 1, rightIndex, target);
+            }
+        } else {
+            // Return -1 if value not found
+            return -1;
+        }
+    }
 
     // Getter for counter
     public int getCounter() {
