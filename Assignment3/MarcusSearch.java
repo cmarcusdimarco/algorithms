@@ -65,13 +65,13 @@ public class MarcusSearch {
             // If less than the value at midpoint, search the left half
             // If greater than the value at midpoint, search the upper half
             if (target.compareToIgnoreCase(array[midpoint]) == 0) {
-                counter++;      // Increment for if
+                counter++;      // Increment for comparison
                 return midpoint;
             } else if (target.compareToIgnoreCase(array[midpoint]) < 0) {
-                counter += 2;   // Increment for if and else if
+                counter++;      // Increment for comparison
                 return binarySearch(array, leftIndex, midpoint - 1, target);
             } else {
-                counter += 2;   // Increment for if and else if
+                counter++;      // Increment for comparison
                 return binarySearch(array, midpoint + 1, rightIndex, target);
             }
         } else {
