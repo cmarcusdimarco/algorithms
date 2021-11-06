@@ -58,7 +58,7 @@ public class MarcusSearch {
     private int binarySearch(String[] array, int leftIndex, int rightIndex, String target) {
 
         // Check for IndexOutOfBoundsException
-        if (rightIndex >= 1) {
+        if (rightIndex >= 0) {
             int midpoint = (leftIndex + rightIndex) / 2;
 
             // If the target is at the midpoint index, return the index
