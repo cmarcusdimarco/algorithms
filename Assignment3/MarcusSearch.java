@@ -76,8 +76,7 @@ public class MarcusSearch {
                 return binarySearch(array, midpoint + 1, rightIndex, target);
             }
         } else {
-            // Return -1 if value not found
-            return -1;
+            return -1;          // Return -1 if value not found
         }
     }
 
