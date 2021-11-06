@@ -1,0 +1,459 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CMPT 435
+% Lab One
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from: http://www.LaTeXTemplates.com
+% Original author: % Frits Wenneker (http://www.howtotex.com)
+% License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Modified by Alan G. Labouseur  - alan@labouseur.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letterpaper, 10pt]{article} 
+
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{graphicx}
+\usepackage[lined,linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{listings}
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\usepackage{lastpage}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{multirow}
+
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{page \thepage\ of \pageref{LastPage}} % Page numbering for center footer
+\fancyfoot[R]{}
+
+\definecolor{commentgreen}{rgb}{0, 0.6, 0}
+\definecolor{keywordmagenta}{rgb}{.84, 0.09, 0.41}
+
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{commentgreen},
+    keywordstyle=\color{keywordmagenta},
+    numberstyle=\color{gray},
+    numbers=left,
+    literate={\ \ }{{\ }}1
+}
+
+\lstset{style=mystyle}
+
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+   \normalfont \normalsize 
+   \textsc{CMPT 435 - Fall 2021 - Dr. Labouseur} \\[10pt] % Header stuff.
+   \horrule{0.5pt} \\[0.25cm] 	% Top horizontal rule
+   \huge Assignment Three -- Magic Items Searcher \\     	    % Assignment title
+   \horrule{0.5pt} \\[0.25cm] 	% Bottom horizontal rule
+}
+
+\author{C. Marcus DiMarco \\ \normalsize C.DiMarco1@Marist.edu}
+
+\date{\normalsize\ November 5, 2021} 	% Today's date.
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%   CONTENT SECTION
+%----------------------------------------------------------------------------------------
+
+% - -- -  - -- -  - -- -  -
+
+\section{Objectives}
+
+\begin{itemize}
+    \item \hspace{0.5em}Create a program that searches for a set of 42 random Strings within a given text file using linear search and binary search.
+    \item \hspace{0.5em}In this same program, populate a hash table and retrieve the aforementioned set of Strings from the table.
+    \item \hspace{0.5em}Print the number of comparisons for each search/retrieval, as well as the average comparisons for each method after all 42 searches/retrievals.
+\end{itemize}
+
+\vspace{1.0em}
+
+\section{Conditions}
+
+\begin{itemize}
+    \item \hspace{0.5em}The average comparisons for each method must print only two decimal places.
+    \item \hspace{0.5em}The program must only use custom algorithms for the searches and hashing, with the exception of the hash function provided at  \url{https://www.labouseur.com/courses/algorithms/Hashing.java.html}. Any of these which already exist in the language may not be used.
+\end{itemize}
+
+\vspace{1.0em}
+
+\section{Overview}
+
+\hspace{1.0em}In order to enhance readability, each search algorithm is a method contained in the class MarcusSort.
+
+\subsection{linearSearch()}
+
+\hspace{1.0em}The most straightforward searching algorithm in this program is linear search. Linear search starts at the first index and iterates through the array until it finds the target value.
+
+\begin{lstlisting}[language=Java, firstnumber=15]
+    // Linear search will search the entire array in order,
+    // halting once the target has been found
+    public void linearSearch(String[] array, String target) {
+
+        // Start with counter at 0
+        this.resetCounter();
+
+        // Search the array in indexed order for the target
+        for (int i = 0; i < array.length; i++) {
+            counter++;
+            // If found, print completion message and break
+            if (array[i].compareToIgnoreCase(target) == 0) {
+                this.printCompletionMessage();
+                return;
+            }
+        }
+
+        // If not found, print message and counter
+        this.printFailureMessage();
+    }
+\end{lstlisting}
+
+\subsection{binarySearch()}
+
+\hspace{1.0em}Improving on linear search is binary search. Binary search uses a logarithmic approach to searching, which greatly reduces the amount of comparisons needed on average. Binary search is only effective, however, if the array is sorted. We compare our target to the midpoint of the array. If they are equal, we have found the target. If the target is lower, we search the lower half of the array in the same way. The same is true for the upper half if the target is higher.
+
+\vspace{6.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=36]
+    // Abstracting binarySearch() for ease-of-use and to ensure
+    // proper counter functionality
+    public void binarySearch(String[] array, String target) {
+
+        // Start with counter at 0
+        this.resetCounter();
+
+        // Private binary search method
+        int indexOfTarget = binarySearch(array, 0, array.length - 1, target);
+
+        // Print message conditional on if target was found
+        if (indexOfTarget == -1) {
+            this.printFailureMessage();
+        } else {
+            this.printCompletionMessage();
+        }
+    }
+
+    /// Binary search will take a midpoint of the sorted array and
+    // compare the target, recursively calling binary search on the
+    // half of the array that would contain the sorted target
+    // until found or a base case is reached.
+    private int binarySearch(String[] array, int leftIndex,
+                             int rightIndex, String target) {
+
+        // Check for IndexOutOfBoundsException
+        if (rightIndex >= 0) {
+            int midpoint = (leftIndex + rightIndex) / 2;
+
+            // If the target is at the midpoint index, return the index
+            // If less than the value at midpoint, search the left half
+            // If greater than the value at midpoint, search the upper half
+            if (target.compareToIgnoreCase(array[midpoint]) == 0) {
+                counter++;      // Increment for comparison
+                return midpoint;
+            } else if (target.compareToIgnoreCase(array[midpoint]) < 0) {
+                counter++;      // Increment for comparison
+                return binarySearch(array, leftIndex, midpoint - 1, target);
+            } else {
+                counter++;      // Increment for comparison
+                return binarySearch(array, midpoint + 1, rightIndex, target);
+            }
+        } else {
+            return -1;          // Return -1 if value not found
+        }
+    }
+\end{lstlisting}
+
+\section{MarcusHash}
+
+\hspace{1.0em}In our custom hashing library, we have four primary functions: makeHashCode(), loadToTable(), chainToTable(), and retrieve().
+
+\subsection{makeHashCode()}
+
+\hspace{1.0em} makeHashCode() is a hashing function sourced from \url{https://www.labouseur.com/courses/algorithms/Hashing.java.html}. It uses the sum of a String's ASCII values to generate a hash value.
+
+\begin{lstlisting}[language=Java, firstnumber=14]
+    // Hash function
+    public int makeHashCode(String string, int hashTableSize) {
+        string = string.toUpperCase();
+        int length = string.length();
+        int letterTotal = 0;
+
+        // Iterate over all letters in the string, totalling
+        // their ASCII values.
+        for (int i = 0; i < length; i++) {
+            char thisLetter = string.charAt(i);
+            int thisValue = (int) thisLetter;
+            letterTotal += thisValue;
+
+            // Test: prints the char and the hash.
+            /*
+            System.out.print(" [");
+            System.out.print(thisLetter);
+            System.out.print(thisValue);
+            System.out.print("] ");
+            // */
+        }
+
+        // Scale letterTotal to fit in hashTableSize
+        int hashCode = (letterTotal * 1) % hashTableSize;
+
+        return hashCode;
+    }
+\end{lstlisting}
+
+\vspace{6.0em}
+
+\subsection{loadToTable()}
+
+\hspace{1.0em}Once we've generated the hash value for a given String, we must populate the hash table with it. loadToTable() is an abstraction for user-friendliness that houses a try/catch block to prevent an IndexOutOfBoundsException from passing conflicting parameters. It checks if the index at the hash value has been populated, and if not, adds the MarcusNode passed. If the index already has a pointer to a MarcusNode, loadToTable() begins a (potentially recursive) call to chainToTable().
+
+\vspace{2.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=42]
+    // Add MarcusNode to table
+    public void loadToTable(MarcusNode[] hashTable, MarcusNode node,
+                            int hashCode) {
+        // Try/catch block to ensure param @hashCode will fit into param @hashTable
+        try {
+            if (hashTable[hashCode] == null) {
+                hashTable[hashCode] = node;
+            } else {
+                chainToTable(hashTable[hashCode], node);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Whoops! You're passing a hash value greater " +
+                               "than the size of the hash table.");
+            e.printStackTrace();
+        }
+    }
+\end{lstlisting}
+
+\subsection{chainToTable()}
+
+\hspace{1.0em}chainToTable() is where the magic happens. If nodeInTable points to null, then we set its pointer to nodeToChain. If nodeInTable points to a MarcusNode, we call chainToTable() again on the next node in the chain until we reach the base case of pointing to null.
+
+\vspace{2.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=59]
+    // Recursive chain function for hash table - only for use by loadToTable()
+    private void chainToTable(MarcusNode nodeInTable, MarcusNode nodeToChain) {
+        if (nodeInTable.getNext() == null) {
+            nodeInTable.setNext(nodeToChain);
+            return;
+        } else {
+            chainToTable(nodeInTable.getNext(), nodeToChain);
+        }
+    }
+\end{lstlisting}
+
+\subsection{retrieve()}
+
+\hspace{1.0em}In order to retrieve values from the hash table, we first need to get the hash value of the target. Then, using currentNode, we can travel the chain at the index of the hash value and compare each String along the way.
+
+\vspace{2.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=69]
+    // Retrieve value from hashTable, if exists
+    public void retrieve(MarcusNode[] hashTable, String target) {
+        int hashCode = makeHashCode(target, hashTable.length);
+        MarcusNode currentNode = hashTable[hashCode];
+
+        // Reset counter
+        this.resetCounter();
+
+        while (currentNode != null) {
+            counter++;
+            if (target.compareTo(currentNode.getItem()) == 0) {
+                this.printCompletionMessage();
+                return;
+            } else {
+                currentNode = currentNode.getNext();
+            }
+        }
+
+        // If not found, print failure message
+        this.printFailureMessage();
+    }
+\end{lstlisting}
+
+
+\subsection{Other helper functions}
+
+\hspace{1.0em}Below are the remaining functions present in both MarcusSearch and MarcusHash (the two classes print different completion/failure messages, but these methods are otherwise the same).
+
+\vspace{2.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=91]
+    // Getter for counter
+    public int getCounter() {
+        return counter;
+    }
+
+    // Controlling setter functionality to only reset to 0
+    public void resetCounter() {
+        counter = 0;
+    }
+
+    // Message to print upon completing retrieval which includes counter
+    public void printCompletionMessage() {
+        System.out.println("Retrieval complete! Number of comparisons: "
+                           + counter);
+    }
+
+    // Message to print if search completed without finding target
+    public void printFailureMessage() {
+        System.out.println("Retrieval unsuccessful - target not found." +
+                           "\nNumber of comparisons: " + counter);
+    }
+\end{lstlisting}
+
+\vspace{3.0em}
+
+\subsection{Assignment3}
+
+\hspace{1.0em}With the methods we have just defined, we are ready to create our searcher. We'll need some imported libraries: namely, java.io.File to import a file, java.io.FileNotFoundException to account for errors finding the input file, and java.util.Scanner to read the file.
+
+\vspace{5.0em}
+
+\begin{lstlisting}[language=Java]
+/**
+ * A program which reads a constant number of Strings
+ * from a file, sorts it using a custom sort library,
+ * then searches for a random 42 items using custom
+ * linear and binary search implementations. Then,
+ * hashes the Strings into a table and retrieves the
+ * 42 items.
+ */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Assignment3 {
+    public static void main(String[] args) {
+        final int NUM_OF_ITEMS = 666;                   // Length of file as constant
+        final int NUM_OF_ITEMS_TO_FIND = 42;            // Number of items to find
+        final int HASH_TABLE_SIZE = 250;                // Size of hash table
+        String[] magicItems = new String[NUM_OF_ITEMS]; // Array of file strings
+        MarcusSort sorter = new MarcusSort();           // Instance of MarcusSort
+        MarcusSearch searcher = new MarcusSearch();     // Instance of MarcusSearch
+        MarcusHash hasher = new MarcusHash();           // Instance of MarcusHash
+
+        // Try/catch block for file import and reading
+        try {
+            File file = new File("magicitems.txt");
+            Scanner read = new Scanner(file);
+            for (int i = 0; i < NUM_OF_ITEMS; i++) {
+                magicItems[i] = read.nextLine();
+            }
+            read.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Whoops! Couldn't find magicitems.txt");
+            e.printStackTrace();
+        }
+
+        // Select 42 items at random from magicitems[] and populate a subarray
+        sorter.notRosannaShuffle(magicItems);
+        String[] magicItemTargets = new String[NUM_OF_ITEMS_TO_FIND];
+        for (int i = 0; i < magicItemTargets.length; i++) {
+            magicItemTargets[i] = magicItems[i];
+        }
+
+        // Sort magicitems[]
+        sorter.quickSort(magicItems);
+
+        // Use linear search and print comparisons
+        double averageComparisons = 0;
+        for (int i = 0; i < magicItemTargets.length; i++) {
+            searcher.linearSearch(magicItems, magicItemTargets[i]);
+            averageComparisons += searcher.getCounter();
+        }
+        averageComparisons /= magicItemTargets.length;
+        System.out.printf("Average comparisons for linear search: %.2f",
+                           averageComparisons);
+        System.out.println();
+
+        // Use binary search and print comparisons
+        averageComparisons = 0;
+        for (int i = 0; i < magicItemTargets.length; i++) {
+            searcher.binarySearch(magicItems, magicItemTargets[i]);
+            averageComparisons += searcher.getCounter();
+        }
+        averageComparisons /= magicItemTargets.length;
+        System.out.printf("Average comparisons for binary search: %.2f",
+                           averageComparisons);
+        System.out.println();
+
+        // Hash magicItems[]
+        MarcusNode[] hashTable = new MarcusNode[HASH_TABLE_SIZE];
+        for (int i = 0; i < magicItems.length; i++) {
+            int hashCode = hasher.makeHashCode(magicItems[i], hashTable.length);
+            MarcusNode node = new MarcusNode(magicItems[i]);
+            hasher.loadToTable(hashTable, node, hashCode);
+        }
+
+        // Retrieve the 42 items from the hash table, printing comparisons
+        averageComparisons = 0;
+        for (int i = 0; i < magicItemTargets.length; i++) {
+            hasher.retrieve(hashTable, magicItemTargets[i]);
+            averageComparisons += hasher.getCounter();
+        }
+        averageComparisons /= magicItemTargets.length;
+        System.out.printf("Average comparisons for hash table retrieval: %.2f",
+                           averageComparisons);
+        System.out.println();
+    }
+}
+\end{lstlisting}
+
+\section{Results}
+
+\hspace{1.0em}Due to the pseudorandom nature of notRosannaShuffle(), exact results will vary from execution to execution. The below table shows the results obtained during 5 trials, along with the average number of comparisons and the expected order of growth for each sort.
+
+\begin{center}
+\begin{tabular}{|c||c|c|c|}
+    \hline
+    \multicolumn{4}{|c|}{Search/Retrieval Performance (in number of average comparisons)} \\
+    \hline
+    & linearSearch() & binarySearch() & retrieve() \\
+    \hline\hline
+    Trial 1 & 358.19 & 8.55 & 2.48 \\
+    Trial 2 & 353.50 & 8.71 & 2.33 \\
+    Trial 3 & 350.31 & 8.43 & 2.71 \\
+    Trial 4 & 295.26 & 8.05 & 2.24 \\
+    Trial 5 & 372.71 & 8.38 & 2.55 \\
+    \hline
+    Average & 345.994 & 8.424 & 2.462 \\
+    \hline
+    $O(g(n))$ & $O(n)$ & $O(log(n))$ & $O(1)$ \\
+    \hline
+\end{tabular}
+\end{center}
+
+\hspace{1.0em}Linear search belongs to $O(n^2)$ due to its worst-case iteration over the entire array. Binary search expects to run in $O(log(n))$ time due to its logarithmic approach, recursively removing half of the array to search per call. Finally, retrieval from a hash table is expected to be $O(1)$, but it can degrade to $O(n)$ if there is a great deal of chaining due to a poorly designed hash function.
+\end{document}
