@@ -55,7 +55,8 @@ public class MarcusSearch {
     // compare the target, recursively calling binary search on the
     // half of the array that would contain the sorted target
     // until found or a base case is reached.
-    private int binarySearch(String[] array, int leftIndex, int rightIndex, String target) {
+    private int binarySearch(String[] array, int leftIndex,
+                             int rightIndex, String target) {
 
         // Check for IndexOutOfBoundsException
         if (rightIndex >= 0) {
