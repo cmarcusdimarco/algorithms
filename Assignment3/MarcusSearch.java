@@ -25,7 +25,7 @@ public class MarcusSearch {
             // If found, print completion message and break
             if (array[i].compareToIgnoreCase(target) == 0) {
                 this.printCompletionMessage();
-                break;
+                return;
             }
         }
 
@@ -59,7 +59,7 @@ public class MarcusSearch {
 
         // Check for IndexOutOfBoundsException
         if (rightIndex >= 1) {
-            int midpoint = (leftIndex + rightIndex - 1) / 2;
+            int midpoint = (leftIndex + rightIndex) / 2;
 
             // If the target is at the midpoint index, return the index
             // If less than the value at midpoint, search the left half
@@ -69,10 +69,10 @@ public class MarcusSearch {
                 return midpoint;
             } else if (target.compareToIgnoreCase(array[midpoint]) < 0) {
                 counter += 2;   // Increment for if and else if
-                return binarySearch(array, leftIndex, midpoint + 1, target);
+                return binarySearch(array, leftIndex, midpoint - 1, target);
             } else {
                 counter += 3;   // Increment for if, else if, and else
-                return binarySearch(array, midpoint - 1, rightIndex, target);
+                return binarySearch(array, midpoint + 1, rightIndex, target);
             }
         } else {
             // Return -1 if value not found
