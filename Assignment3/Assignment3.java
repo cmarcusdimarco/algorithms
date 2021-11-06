@@ -13,8 +13,8 @@ import java.util.Scanner;
 public class Assignment3 {
     public static void main(String[] args) {
         final int NUM_OF_ITEMS = 666;                   // Length of file as constant
-        final int NUM_OF_ITEMS_TO_FIND = 42;            // Number of items to find as constant
-        final int HASH_TABLE_SIZE = 250;                // Size of hash table as constant
+        final int NUM_OF_ITEMS_TO_FIND = 42;            // Number of items to find
+        final int HASH_TABLE_SIZE = 250;                // Size of hash table
         String[] magicItems = new String[NUM_OF_ITEMS]; // Array of file strings
         MarcusSort sorter = new MarcusSort();           // Instance of MarcusSort
         MarcusSearch searcher = new MarcusSearch();     // Instance of MarcusSearch
@@ -50,7 +50,8 @@ public class Assignment3 {
             averageComparisons += searcher.getCounter();
         }
         averageComparisons /= magicItemTargets.length;
-        System.out.printf("Average comparisons for linear search: %.2f", averageComparisons);
+        System.out.printf("Average comparisons for linear search: %.2f",
+                           averageComparisons);
         System.out.println();
 
         // Use binary search and print comparisons
@@ -60,7 +61,8 @@ public class Assignment3 {
             averageComparisons += searcher.getCounter();
         }
         averageComparisons /= magicItemTargets.length;
-        System.out.printf("Average comparisons for binary search: %.2f", averageComparisons);
+        System.out.printf("Average comparisons for binary search: %.2f",
+                           averageComparisons);
         System.out.println();
 
         // Hash magicItems[]
@@ -78,7 +80,8 @@ public class Assignment3 {
             averageComparisons += hasher.getCounter();
         }
         averageComparisons /= magicItemTargets.length;
-        System.out.printf("Average comparisons for hash table retrieval: %.2f", averageComparisons);
+        System.out.printf("Average comparisons for hash table retrieval: %.2f",
+                           averageComparisons);
         System.out.println();
     }
 }
