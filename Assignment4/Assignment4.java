@@ -13,12 +13,7 @@ import java.util.Scanner;
 public class Assignment4 {
     public static void main(String[] args) {
         final int NUM_OF_ITEMS = 666;                   // Length of file as constant
-        final int NUM_OF_ITEMS_TO_FIND = 42;            // Number of items to find
-        final int HASH_TABLE_SIZE = 250;                // Size of hash table
         String[] magicItems = new String[NUM_OF_ITEMS]; // Array of file strings
-        MarcusSort sorter = new MarcusSort();           // Instance of MarcusSort
-        MarcusSearch searcher = new MarcusSearch();     // Instance of MarcusSearch
-        MarcusHash hasher = new MarcusHash();           // Instance of MarcusHash
 
         // Read graphs1.txt and create matrix, adjacency list, and linked objects
 
