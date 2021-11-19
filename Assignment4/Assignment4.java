@@ -20,6 +20,14 @@ public class Assignment4 {
         MarcusSearch searcher = new MarcusSearch();     // Instance of MarcusSearch
         MarcusHash hasher = new MarcusHash();           // Instance of MarcusHash
 
+        // Read graphs1.txt and create matrix, adjacency list, and linked objects
+
+        // Print matrix and adjacency lists
+
+        // Perform depth-first traversals, printing vertex IDs as encountered
+
+        // Perform breadth-first traversals, printing IDs as encountered
+
         // Try/catch block for file import and reading
         try {
             File file = new File("magicitems.txt");
@@ -33,55 +41,10 @@ public class Assignment4 {
             e.printStackTrace();
         }
 
-        // Select 42 items at random from magicitems[] and populate a subarray
-        sorter.notRosannaShuffle(magicItems);
-        String[] magicItemTargets = new String[NUM_OF_ITEMS_TO_FIND];
-        for (int i = 0; i < magicItemTargets.length; i++) {
-            magicItemTargets[i] = magicItems[i];
-        }
+        // Populate BST with magicItems, printing the path from the root
 
-        // Sort magicitems[]
-        sorter.quickSort(magicItems);
+        // Print the entire BST with an in-order traversal
 
-        // Use linear search and print comparisons
-        double averageComparisons = 0;
-        for (int i = 0; i < magicItemTargets.length; i++) {
-            searcher.linearSearch(magicItems, magicItemTargets[i]);
-            averageComparisons += searcher.getCounter();
-        }
-        averageComparisons /= magicItemTargets.length;
-        System.out.printf("Average comparisons for linear search: %.2f",
-                           averageComparisons);
-        System.out.println();
-
-        // Use binary search and print comparisons
-        averageComparisons = 0;
-        for (int i = 0; i < magicItemTargets.length; i++) {
-            searcher.binarySearch(magicItems, magicItemTargets[i]);
-            averageComparisons += searcher.getCounter();
-        }
-        averageComparisons /= magicItemTargets.length;
-        System.out.printf("Average comparisons for binary search: %.2f",
-                           averageComparisons);
-        System.out.println();
-
-        // Hash magicItems[]
-        MarcusNode[] hashTable = new MarcusNode[HASH_TABLE_SIZE];
-        for (int i = 0; i < magicItems.length; i++) {
-            int hashCode = hasher.makeHashCode(magicItems[i], hashTable.length);
-            MarcusNode node = new MarcusNode(magicItems[i]);
-            hasher.loadToTable(hashTable, node, hashCode);
-        }
-
-        // Retrieve the 42 items from the hash table, printing comparisons
-        averageComparisons = 0;
-        for (int i = 0; i < magicItemTargets.length; i++) {
-            hasher.retrieve(hashTable, magicItemTargets[i]);
-            averageComparisons += hasher.getCounter();
-        }
-        averageComparisons /= magicItemTargets.length;
-        System.out.printf("Average comparisons for hash table retrieval: %.2f",
-                           averageComparisons);
-        System.out.println();
+        // Read magicitems-find-in-bst.txt and lookup in BST, printing path
     }
 }
