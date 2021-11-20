@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 public class MarcusGraphs {
     private ArrayList<MarcusVertex> vertices;
+    private MarcusVertex initialVertex;
 
     // Default constructor
     public MarcusGraphs() {
         this.vertices = new ArrayList<MarcusVertex>();
+        this.initialVertex = null;
     }
 
     // Prints a matrix of all vertices, printing a 1 at the intersection
@@ -95,7 +97,11 @@ public class MarcusGraphs {
         }
     }
 
+    // Add vertex to ArrayList and set initialVertex if needed
     public void addVertex (MarcusVertex vertex) {
         this.vertices.add(vertex);
+        if (this.initialVertex == null) {
+            this.initialVertex = vertex;
+        }
     }
 }
