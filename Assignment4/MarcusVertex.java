@@ -8,11 +8,13 @@ public class MarcusVertex {
     private int id;
     private boolean isProcessed;
     private ArrayList<MarcusVertex> neighbors;
+    private MarcusVertex next;
 
     public MarcusVertex(int id) {
         this.id = id;
         this.isProcessed = false;
         this.neighbors = new ArrayList<MarcusVertex>();
+        this.next = null;
     }
 
     public boolean hasNeighbor(MarcusVertex neighbor) {
@@ -46,10 +48,22 @@ public class MarcusVertex {
         this.neighbors.add(neighbor);
     }
 
+    public ArrayList<MarcusVertex> getNeighbors() {
+        return this.neighbors;
+    }
+
     public void printNeighbors() {
         for (MarcusVertex currentVertex : neighbors) {
             System.out.print(currentVertex.getId() + " ");
         }
         System.out.print("\n");
+    }
+
+    public void setNext(MarcusVertex next) {
+        this.next = next;
+    }
+
+    public MarcusVertex getNext() {
+        return this.next;
     }
 }
