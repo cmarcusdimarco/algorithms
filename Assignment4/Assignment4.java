@@ -17,7 +17,7 @@ public class Assignment4 {
 
         // Read graphs1.txt and create matrix, adjacency list, and linked objects
         try {
-            File graphs = new File("Assignment4/graphs1.txt");
+            File graphs = new File("graphs1.txt");
             Scanner graphRead = new Scanner(graphs);
             MarcusGraphs graph = null;
             String command = null;
@@ -78,7 +78,7 @@ public class Assignment4 {
 
         // Try/catch block for file import and reading
         try {
-            File file = new File("Assignment4/magicitems.txt");
+            File file = new File("magicitems.txt");
             Scanner read = new Scanner(file);
             for (int i = 0; i < NUM_OF_ITEMS; i++) {
                 magicItems[i] = read.nextLine();
@@ -96,9 +96,27 @@ public class Assignment4 {
             binarySearchTree.insertNode(node);
             System.out.println(item + ": " + binarySearchTree.getPath());
         }
+        System.out.print("\n\n");
 
         // Print the entire BST with an in-order traversal
+        binarySearchTree.inOrderTraversal(binarySearchTree.getRoot());
 
         // Read magicitems-find-in-bst.txt and lookup in BST, printing path
+        try {
+            File itemsToFind = new File("magicitems-find-in-bst.txt");
+            Scanner bstRead = new Scanner(itemsToFind);
+            String currentItem;
+            while (bstRead.hasNextLine()) {
+                currentItem = bstRead.nextLine();
+                binarySearchTree.search(currentItem);
+                System.out.println(currentItem + ": " + binarySearchTree.getPath());
+                System.out.println("    Number of comparisons: "
+                                   + binarySearchTree.getCounter());
+            }
+            bstRead.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Whoops! Couldn't find magicitems-find-in-bst.txt");
+            e.printStackTrace();
+        }
     }
 }
