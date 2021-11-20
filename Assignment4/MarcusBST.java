@@ -23,12 +23,19 @@ public class MarcusBST {
         MarcusNode currentNode = root;
         MarcusNode trailingNode = null;
 
+        this.resetPath();
+
         // Find the correct space in the tree
         while (currentNode != null) {
             trailingNode = currentNode;
+            if (this.path != null) {
+                this.path += ", ";
+            }
             if (node.getItem().compareToIgnoreCase(currentNode.getItem()) < 0) {
+                this.path += "L";
                 currentNode = currentNode.getLeftChild();
             } else {
+                this.path += "R";
                 currentNode = currentNode.getRightChild();
             }
         }
@@ -46,17 +53,28 @@ public class MarcusBST {
         }
     }
 
+    // search recursively iterates through the BST to find the target
+    // in log(n) time, counting comparisons and printing the path
     public String search(MarcusNode root, String target) {
+
+        this.resetCounter();
+        this.resetPath();
+
         if (root == null) { 
             return "Target not found.";
         } else if (root.getItem().compareTo(target) == 0) {
+            counter++;
             return target;
         } else {
+            counter++;
+            if (this.path != null) {
+                this.path += ", ";
+            }
             if (target.compareToIgnoreCase(root.getItem()) < 0) {
-                System.out.print("L, ");
+                this.path += "L";
                 return search(root.getLeftChild(), target);
             } else {
-                System.out.print("R, ");
+                this.path += "R";
                 return search(root.getRightChild(), target);
             }
         }
