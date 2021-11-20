@@ -15,6 +15,16 @@ public class MarcusVertex {
         this.neighbors = new ArrayList<MarcusVertex>();
     }
 
+    public boolean hasNeighbor(MarcusVertex neighbor) {
+        for (int i = 0; i < neighbors.size(); i++) {
+            if (neighbors.get(i).getId() == neighbor.getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Setters and getters for private fields
     public int getId() {
         return this.id;
@@ -40,5 +50,6 @@ public class MarcusVertex {
         for (MarcusVertex currentVertex : neighbors) {
             System.out.print(currentVertex.getId() + " ");
         }
+        System.out.print("\n");
     }
 }
