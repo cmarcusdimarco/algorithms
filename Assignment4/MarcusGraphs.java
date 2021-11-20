@@ -98,11 +98,15 @@ public class MarcusGraphs {
     }
 
     // Add vertex to ArrayList and set initialVertex if needed
-    public void addVertex (MarcusVertex vertex) {
+    public void addVertex(MarcusVertex vertex) {
         this.vertices.add(vertex);
         if (this.initialVertex == null) {
             this.initialVertex = vertex;
         }
+    }
+
+    public MarcusVertex getVertex(int vertexId) {
+        return vertices.get(vertexId - 1);
     }
 
     public MarcusVertex getInitialVertex() {
