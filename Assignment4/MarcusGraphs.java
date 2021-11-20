@@ -46,7 +46,7 @@ public class MarcusGraphs {
     // Prints each vertex followed by its neighbors
     public void printAdjacencyList() {
         for (int i = 0; i < vertices.size(); i++) {
-            System.out.print("[" + vertices.get(i) + "] ");
+            System.out.print("[" + vertices.get(i).getId() + "] ");
             vertices.get(i).printNeighbors();
         }
     }
