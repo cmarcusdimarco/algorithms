@@ -23,19 +23,19 @@ public class MarcusGraphs {
             for (int j = -1; j < vertices.size(); j++) {
                 if (i == -1 && j == -1) {
                     // Top left corner is blank space
-                    System.out.print("  ");
+                    System.out.printf("%3s", "");
                 } else if (i == -1) {
                     // Top row is vertex IDs
-                    System.out.print(vertices.get(j).getId() + " ");
+                    System.out.printf("%3s", vertices.get(j).getId() + " ");
                 } else if (j == -1) {
                     // First column is vertex IDs
-                    System.out.print(vertices.get(i).getId() + " ");
+                    System.out.printf("%3s", vertices.get(i).getId() + " ");
                 } else if (vertices.get(i).hasNeighbor(vertices.get(j))) {
                     // If the vertices are neighbords, print 1
-                    System.out.print("1 ");
+                    System.out.printf("%3s", "1 ");
                 } else {
                     // If not neighbors, print .
-                    System.out.print(". ");
+                    System.out.printf("%3s", ". ");
                 }
             }
             // New line
