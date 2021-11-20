@@ -1,10 +1,13 @@
 /**
- * A program which reads a constant number of Strings
- * from a file, sorts it using a custom sort library,
- * then searches for a random 42 items using custom
- * linear and binary search implementations. Then,
- * hashes the Strings into a table and retrieves the
- * 42 items.
+ * A program which completes two tasks. The first is creating graphs from
+ * a file and printing the matrices, adjacency lists, depth-first and
+ * breadth-first traversals.
+ * 
+ * The second is reading a file of a constant number of Strings and
+ * populating a binary search tree with the items, printing the paths
+ * taken on the tree. It then prints an in-order traversal, followed
+ * by the search results of finding 42 distinct items and the average
+ * comparisons needed to search in the tree.
  */
 import java.io.File;
 import java.io.FileNotFoundException;
