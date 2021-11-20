@@ -55,12 +55,21 @@ public class MarcusBST {
         }
     }
 
-    // search recursively iterates through the BST to find the target
-    // in log(n) time, counting comparisons and printing the path
-    public String search(MarcusNode root, String target) {
+    // Public-facing abstraction for proper counter and path tracking
+    public void search(String target) {
 
+        // Reset counter and path
         this.resetCounter();
         this.resetPath();
+
+        // Execute private recursive method
+        search(this.getRoot(), target);
+    }
+
+
+    // search recursively iterates through the BST to find the target
+    // in log(n) time, counting comparisons and printing the path
+    private String search(MarcusNode root, String target) {
 
         if (root == null) { 
             return "Target not found.";
@@ -82,6 +91,16 @@ public class MarcusBST {
         }
     }
 
+    public void inOrderTraversal(MarcusNode node) {
+        if (node == null) {
+            return;
+        }
+
+        inOrderTraversal(node.getLeftChild());
+        System.out.println(node.getItem());
+        inOrderTraversal(node.getRightChild());
+    }
+
     // Setters and getters for private fields
     public String getPath() {
         return this.path;
@@ -97,5 +116,9 @@ public class MarcusBST {
 
     public void resetCounter() {
         this.counter = 0;
+    }
+
+    public MarcusNode getRoot() {
+        return this.root;
     }
 }
