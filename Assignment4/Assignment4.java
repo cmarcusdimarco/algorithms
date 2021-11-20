@@ -29,10 +29,14 @@ public class Assignment4 {
                     if (graph == null) {
                         graphRead.nextLine();
                     } else {
+                        System.out.println("Matrix:");
                         graph.printMatrix();
+                        System.out.println("Adjacency list:");
                         graph.printAdjacencyList();
+                        System.out.println("Depth-first traversal:");
                         graph.depthFirstTraversal(graph.getInitialVertex());
                         System.out.print("\n\n");
+                        System.out.println("Breadth-first traversal:");
                         graph.breadthFirstTraversal(graph.getInitialVertex());
                     }
                 } else if (command.equals("new")) {
@@ -57,10 +61,14 @@ public class Assignment4 {
                     }
                 }
             }
+            System.out.println("Matrix:");
             graph.printMatrix();
+            System.out.println("Adjacency list:");
             graph.printAdjacencyList();
+            System.out.println("Depth-first traversal:");
             graph.depthFirstTraversal(graph.getInitialVertex());
             System.out.print("\n\n");
+            System.out.println("Breadth-first traversal:");
             graph.breadthFirstTraversal(graph.getInitialVertex());
             graphRead.close();
         } catch (FileNotFoundException e) {
@@ -82,6 +90,12 @@ public class Assignment4 {
         }
 
         // Populate BST with magicItems, printing the path from the root
+        MarcusBST binarySearchTree = new MarcusBST();
+        for (String item : magicItems) {
+            MarcusNode node = new MarcusNode(item);
+            binarySearchTree.insertNode(node);
+            System.out.println(item + ": " + binarySearchTree.getPath());
+        }
 
         // Print the entire BST with an in-order traversal
 
