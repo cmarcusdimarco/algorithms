@@ -39,7 +39,7 @@ public class MarcusGraphs {
                 }
             }
             // New line
-            System.out.print("\n");
+            System.out.print("\n\n");
         }
     }
 
@@ -49,6 +49,7 @@ public class MarcusGraphs {
             System.out.print("[" + vertices.get(i).getId() + "] ");
             vertices.get(i).printNeighbors();
         }
+        System.out.print("\n");
     }
 
     // Traverses a graph vertex-by-vertex, going as deep as possible from
@@ -88,6 +89,8 @@ public class MarcusGraphs {
                 }
             }
         }
+
+        System.out.print("\n\n");
     }
 
     // Reset isProcessed for each vertex in the graph
@@ -105,8 +108,17 @@ public class MarcusGraphs {
         }
     }
 
-    public MarcusVertex getVertex(int vertexId) {
-        return vertices.get(vertexId - 1);
+    public MarcusVertex getVertexById(int vertexId) {
+        MarcusVertex returnVertex = null;
+
+        for (MarcusVertex currentVertex : vertices) {
+            if (currentVertex.getId() == vertexId) {
+                returnVertex = currentVertex;
+                break;
+            }
+        }
+
+        return returnVertex;
     }
 
     public MarcusVertex getInitialVertex() {
