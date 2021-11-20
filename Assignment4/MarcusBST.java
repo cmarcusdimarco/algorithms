@@ -11,10 +11,12 @@ public class MarcusBST {
     // Default constructor
     public MarcusBST() {
         this.root = null;
+        this.path = "";
     }
 
     public MarcusBST(MarcusNode root) {
         this.root = root;
+        this.path = "";
     }
 
     // insertNode finds the correct space in the tree for the node,
@@ -28,7 +30,7 @@ public class MarcusBST {
         // Find the correct space in the tree
         while (currentNode != null) {
             trailingNode = currentNode;
-            if (this.path != null) {
+            if (!this.path.equals("")) {
                 this.path += ", ";
             }
             if (node.getItem().compareToIgnoreCase(currentNode.getItem()) < 0) {
@@ -86,7 +88,7 @@ public class MarcusBST {
     }
 
     public void resetPath() {
-        this.path = null;
+        this.path = "";
     }
 
     public int getCounter() {
