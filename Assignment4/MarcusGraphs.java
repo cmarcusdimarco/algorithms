@@ -104,4 +104,8 @@ public class MarcusGraphs {
             this.initialVertex = vertex;
         }
     }
+
+    public MarcusVertex getInitialVertex() {
+        return initialVertex;
+    }
 }
