@@ -106,14 +106,18 @@ public class Assignment4 {
             File itemsToFind = new File("magicitems-find-in-bst.txt");
             Scanner bstRead = new Scanner(itemsToFind);
             String currentItem;
+            double average = 0;
             while (bstRead.hasNextLine()) {
                 currentItem = bstRead.nextLine();
                 binarySearchTree.search(currentItem);
                 System.out.println(currentItem + ": " + binarySearchTree.getPath());
                 System.out.println("    Number of comparisons: "
                                    + binarySearchTree.getCounter());
+                average += binarySearchTree.getCounter();
             }
             bstRead.close();
+            average /= 42.0;
+            System.out.println("Average comparisons: " + average);
         } catch (FileNotFoundException e) {
             System.out.println("Whoops! Couldn't find magicitems-find-in-bst.txt");
             e.printStackTrace();
