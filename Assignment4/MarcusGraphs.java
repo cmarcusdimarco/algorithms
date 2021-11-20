@@ -94,4 +94,8 @@ public class MarcusGraphs {
             currentVertex.setIsProcessed(false);
         }
     }
+
+    public void addVertex (MarcusVertex vertex) {
+        this.vertices.add(vertex);
+    }
 }
