@@ -24,15 +24,7 @@ public class Assignment5 {
                     if (graph == null) {
                         graphRead.nextLine();
                     } else {
-                        System.out.println("Matrix:");
-                        graph.printMatrix();
-                        System.out.println("Adjacency list:");
-                        graph.printAdjacencyList();
-                        System.out.println("Depth-first traversal:");
-                        graph.depthFirstTraversal(graph.getInitialVertex());
-                        System.out.print("\n\n");
-                        System.out.println("Breadth-first traversal:");
-                        graph.breadthFirstTraversal(graph.getInitialVertex());
+                        // Run SSSP
                     }
                 } else if (command.equals("new")) {
                 // Create new graph
@@ -49,10 +41,12 @@ public class Assignment5 {
                         int a = graphRead.nextInt();
                         graphRead.next();
                         int b = graphRead.nextInt();
+                        int edgeWeight = graphRead.nextInt();
+                        // TODO: add weight support
                         MarcusVertex first = graph.getVertexById(a);
                         MarcusVertex second = graph.getVertexById(b);
                         first.addNeighbor(second);
-                        second.addNeighbor(first);
+                        
                     }
                 }
             }
