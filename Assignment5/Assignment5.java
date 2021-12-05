@@ -4,6 +4,9 @@
  * on directed graphs and to implement a greedy solution to
  * fractional knapsack.
  */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Assignment5 {
     public static void main(String[] args) {
