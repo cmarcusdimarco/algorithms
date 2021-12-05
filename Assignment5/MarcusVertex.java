@@ -9,12 +9,14 @@ public class MarcusVertex {
     private boolean isProcessed;
     private ArrayList<MarcusVertex> neighbors;
     private MarcusVertex next;
+    private int weight;
 
     public MarcusVertex(int id) {
         this.id = id;
         this.isProcessed = false;
         this.neighbors = new ArrayList<MarcusVertex>();
         this.next = null;
+        this.weight = null;
     }
 
     public boolean hasNeighbor(MarcusVertex neighbor) {
@@ -65,5 +67,13 @@ public class MarcusVertex {
 
     public MarcusVertex getNext() {
         return this.next;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getWeight() {
+        return this.weight;
     }
 }
