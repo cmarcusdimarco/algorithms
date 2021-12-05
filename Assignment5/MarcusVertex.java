@@ -16,7 +16,7 @@ public class MarcusVertex {
         this.isProcessed = false;
         this.neighbors = new ArrayList<MarcusVertex>();
         this.next = null;
-        this.weight = null;
+        this.weight = 0;
     }
 
     public boolean hasNeighbor(MarcusVertex neighbor) {
