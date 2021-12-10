@@ -177,6 +177,10 @@ public class MarcusGraphs {
         }
     }
 
+    public ArrayList<MarcusVertex> getVertices() {
+        return this.vertices;
+    }
+
     // Add edge to ArrayList
     public void addEdge(MarcusEdge edge) {
         this.edges.add(edge);
