@@ -7,24 +7,35 @@ import java.util.ArrayList;
 public class MarcusVertex {
     private int id;
     private boolean isProcessed;
-    private ArrayList<MarcusVertex> neighbors;
+    private ArrayList<MarcusEdge> edges;
     private MarcusVertex next;
 
     public MarcusVertex(int id) {
         this.id = id;
         this.isProcessed = false;
-        this.neighbors = new ArrayList<MarcusVertex>();
+        this.edges = new ArrayList<MarcusEdge>();
         this.next = null;
     }
 
     public boolean hasNeighbor(MarcusVertex neighbor) {
-        for (int i = 0; i < neighbors.size(); i++) {
-            if (neighbors.get(i).getId() == neighbor.getId()) {
+        for (int i = 0; i < edges.size(); i++) {
+            if (edges.get(i).getDestination().getId() == neighbor.getId()) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public int weightToVertex(MarcusVertex neighbor) {
+        for (int i = 0; i < edges.size(); i++) {
+            if (edges.get(i).getDestination().getId() == neighbor.getId()) {
+                return edges.get(i).getWeight();
+            }
+        }
+
+        System.out.println("No matching edge found.");
+        return -2112;
     }
 
     // Setters and getters for private fields
@@ -44,17 +55,22 @@ public class MarcusVertex {
         this.isProcessed = isProcessed;
     }
 
-    public void addNeighbor(MarcusVertex neighbor) {
-        this.neighbors.add(neighbor);
+    public void addEdge(MarcusEdge edge) {
+        if (edge.getSource().id != this.id) {
+            System.out.println("This is not the edge you're looking for...");
+            System.out.println("(Source of edge does not match this vertex)");
+            return;
+        }
+        this.edges.add(edge);
     }
 
-    public ArrayList<MarcusVertex> getNeighbors() {
-        return this.neighbors;
+    public ArrayList<MarcusEdge> getEdges() {
+        return this.edges;
     }
 
     public void printNeighbors() {
-        for (MarcusVertex currentVertex : neighbors) {
-            System.out.print(currentVertex.getId() + " ");
+        for (MarcusEdge currentEdge : edges) {
+            System.out.print(currentEdge.getDestination().getId() + " ");
         }
         System.out.print("\n");
     }

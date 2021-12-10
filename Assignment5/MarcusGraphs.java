@@ -31,8 +31,9 @@ public class MarcusGraphs {
                     // First column is vertex IDs
                     System.out.printf("%3s", vertices.get(i).getId() + " ");
                 } else if (vertices.get(i).hasNeighbor(vertices.get(j))) {
-                    // If the vertices are neighbords, print 1
-                    System.out.printf("%3s", "1 ");
+                    // If the vertices are neighbors, print weight
+                    System.out.printf("%3s",
+                               vertices.get(i).weightToVertex(vertices.get(j)));
                 } else {
                     // If not neighbors, print .
                     System.out.printf("%3s", ". ");
@@ -61,9 +62,9 @@ public class MarcusGraphs {
             System.out.print(source.getId() + " ");
             source.setIsProcessed(true);
         }
-        for (MarcusVertex currentVertex : source.getNeighbors()) {
-            if (!currentVertex.getIsProcessed()) {
-                depthFirstTraversal(currentVertex);
+        for (MarcusEdge currentEdge : source.getEdges()) {
+            if (!currentEdge.getDestination().getIsProcessed()) {
+                depthFirstTraversal(currentEdge.getDestination());
             }
         }
     }
@@ -82,10 +83,10 @@ public class MarcusGraphs {
         while (!queue.isEmpty()) {
             currentVertex = queue.dequeue();
             System.out.print(currentVertex.getId() + " ");
-            for (MarcusVertex each : currentVertex.getNeighbors()) {
-                if (!each.getIsProcessed()) {
-                    queue.enqueue(each);
-                    each.setIsProcessed(true);
+            for (MarcusEdge each : currentVertex.getEdges()) {
+                if (!each.getDestination().getIsProcessed()) {
+                    queue.enqueue(each.getDestination());
+                    each.getDestination().setIsProcessed(true);
                 }
             }
         }
