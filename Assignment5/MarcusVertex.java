@@ -9,12 +9,17 @@ public class MarcusVertex {
     private boolean isProcessed;
     private ArrayList<MarcusEdge> edges;
     private MarcusVertex next;
+    private int cost;
+    private MarcusVertex shortestSource;
+
 
     public MarcusVertex(int id) {
         this.id = id;
         this.isProcessed = false;
         this.edges = new ArrayList<MarcusEdge>();
         this.next = null;
+        this.cost = 0;
+        this.shortestSource = null;
     }
 
     public boolean hasNeighbor(MarcusVertex neighbor) {
@@ -81,5 +86,21 @@ public class MarcusVertex {
 
     public MarcusVertex getNext() {
         return this.next;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setShortestSource(MarcusVertex source) {
+        this.shortestSource = source;
+    }
+
+    public MarcusVertex getShortestSource() {
+        return shortestSource;
     }
 }
