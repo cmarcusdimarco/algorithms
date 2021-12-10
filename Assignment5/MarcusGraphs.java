@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class MarcusGraphs {
     private ArrayList<MarcusVertex> vertices;
     private MarcusVertex initialVertex;
+    private ArrayList<MarcusEdge> edges;
 
     // Default constructor
     public MarcusGraphs() {
         this.vertices = new ArrayList<MarcusVertex>();
         this.initialVertex = null;
+        this.edges = new ArrayList<MarcusEdge>();
     }
 
     // Prints a matrix of all vertices, printing a 1 at the intersection
@@ -94,6 +96,72 @@ public class MarcusGraphs {
         System.out.print("\n\n");
     }
 
+    // Find the shortest path between two vertices using Bellman-Ford
+    public void singleSourceShortestPath(MarcusVertex source) {
+        initSSSP(source);
+        for (int i = 0; i < this.vertices.size(); i++) {
+            for (MarcusEdge currentEdge : this.edges) {
+                this.relax(currentEdge.getSource(), currentEdge.getDestination(),
+                           currentEdge.getWeight());
+            }
+        }
+        if (noNegativeLoops()) {
+            System.out.println("SSSP complete!");
+        } else {
+            System.out.println("SSSP failed - negative loop present");
+        }
+    }   
+
+    // Initializes the SSSP algorithm, setting costs to max int value,
+    // clearing paths and setting source cost to 0
+    private void initSSSP(MarcusVertex source) {
+        for (MarcusVertex vertex : this.vertices) {
+            vertex.setCost((int) Integer.MAX_VALUE);
+            vertex.setShortestSource(null);
+        }
+        source.setCost(0);
+    }
+
+    // Checks if the cost of moving from first to second is lower than
+    // the recorded cost of second
+    private void relax(MarcusVertex first, MarcusVertex second, int weight) {
+        if (second.getCost() > first.getCost() + weight) {
+            second.setCost(first.getCost() + weight);
+            second.setShortestSource(first);
+        }
+    }
+
+    // Private test for negative loops to ensure possible success for SSSP
+    private boolean noNegativeLoops() {
+        for (MarcusEdge current : this.edges) {
+            if (current.getDestination().getCost() >
+                current.getSource().getCost() + current.getWeight()) {
+                    return false;
+                }
+        }
+        return true;
+    }
+
+    // Private method for printing the shortest path from the source
+    // using MarcusStack 
+    private void printPathFromSource(MarcusVertex vertex) {
+        MarcusStack stack = new MarcusStack();
+
+        while (vertex.getShortestSource() != null) {
+            stack.push(vertex);
+            vertex = vertex.getShortestSource();
+        }
+
+        while(!stack.isEmpty()) {
+            System.out.print(stack.pop().getId());
+            if (!stack.isEmpty()) {
+                System.out.print(" --> ");
+            }
+        }
+
+        System.out.print("\n");
+    }
+
     // Reset isProcessed for each vertex in the graph
     public void resetBooleans() {
         for (MarcusVertex currentVertex : vertices) {
@@ -107,6 +175,11 @@ public class MarcusGraphs {
         if (this.initialVertex == null) {
             this.initialVertex = vertex;
         }
+    }
+
+    // Add edge to ArrayList
+    public void addEdge(MarcusEdge edge) {
+        this.edges.add(edge);
     }
 
     public MarcusVertex getVertexById(int vertexId) {
@@ -124,5 +197,18 @@ public class MarcusGraphs {
 
     public MarcusVertex getInitialVertex() {
         return initialVertex;
+    }
+
+    public void printSSSP(MarcusVertex source) {
+        for (MarcusVertex current : this.vertices) {
+            if (current.equals(source)) {
+                continue;
+            } else {
+                System.out.print(source.getId() + " --> " + current.getId() +
+                                " cost is " + current.getCost() +
+                                "; path: ");
+                this.printPathFromSource(current);
+            }
+        }
     }
 }
