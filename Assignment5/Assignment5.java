@@ -12,7 +12,7 @@ public class Assignment5 {
     public static void main(String[] args) {
         // Read graphs2.txt and create matrix, adjacency list, and linked objects
         try {
-            File graphs = new File("graphs2.txt");
+            File graphs = new File("Assignment5/graphs2.txt");
             Scanner graphRead = new Scanner(graphs);
             MarcusGraphs graph = null;
             String command = null;
@@ -25,6 +25,15 @@ public class Assignment5 {
                         graphRead.nextLine();
                     } else {
                         // Run SSSP
+                        System.out.println("Matrix:");
+                        graph.printMatrix();
+                        System.out.println("Adjacency list:");
+                        graph.printAdjacencyList();
+                        System.out.println("Depth-first traversal:");
+                        graph.depthFirstTraversal(graph.getInitialVertex());
+                        System.out.print("\n\n");
+                        System.out.println("Breadth-first traversal:");
+                        graph.breadthFirstTraversal(graph.getInitialVertex());
                     }
                 } else if (command.equals("new")) {
                 // Create new graph
@@ -42,10 +51,9 @@ public class Assignment5 {
                         graphRead.next();
                         int b = graphRead.nextInt();
                         int edgeWeight = graphRead.nextInt();
-                        // TODO: add weight support
                         MarcusVertex first = graph.getVertexById(a);
                         MarcusVertex second = graph.getVertexById(b);
-                        first.addNeighbor(second);
+                        first.addEdge(new MarcusEdge(first, second, edgeWeight));
                         
                     }
                 }
