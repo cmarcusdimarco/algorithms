@@ -20,7 +20,7 @@ public class SemesterProject {
                 continue;
             } else {
                 // If the random index is not i, swap their values
-                String tempInt = integers[i];
+                int tempInt = integers[i];
                 integers[i] = integers[randomIndex];
                 integers[randomIndex] = tempInt;
             }
