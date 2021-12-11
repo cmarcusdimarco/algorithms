@@ -13,7 +13,7 @@ public class Assignment5 {
     public static void main(String[] args) {
         // Read graphs2.txt and create matrix, adjacency list, and linked objects
         try {
-            File graphs = new File("Assignment5/graphs2.txt");
+            File graphs = new File("graphs2.txt");
             Scanner graphRead = new Scanner(graphs);
             MarcusGraphs graph = null;
             String command = null;
@@ -62,7 +62,7 @@ public class Assignment5 {
         }
 
         try {
-            File spices = new File("Assignment5/spice.txt");
+            File spices = new File("spice.txt");
             Scanner spiceRead = new Scanner(spices);
             String spiceCommand = null;
             String spiceItem = null;
