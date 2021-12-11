@@ -7,6 +7,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Assignment5 {
     public static void main(String[] args) {
@@ -60,5 +61,56 @@ public class Assignment5 {
             e.printStackTrace();
         }
 
+        try {
+            File spices = new File("Assignment5/spice.txt");
+            Scanner spiceRead = new Scanner(spices);
+            String spiceCommand = null;
+            String spiceItem = null;
+            ArrayList<MarcusSpice> spiceArray = new ArrayList<MarcusSpice>();
+            while (spiceRead.hasNextLine()) {
+                spiceCommand = spiceRead.next();
+                if (spiceCommand.equals("--")) {
+                // Skip comment if null
+                    spiceRead.nextLine();
+                } else if (spiceCommand.equals("spice")) {
+                // Create new spice
+                    MarcusSpice spice = new MarcusSpice();
+                    spiceItem = spiceRead.next();
+                    if (spiceItem.equals("name")) {
+                        // Add name to spice
+                        spiceRead.next();
+                        String name = spiceRead.next();
+                        spice.setName(name.substring(0, name.length() - 1));
+                        spiceItem = spiceRead.next();
+                    }
+                    if (spiceItem.equals("total_price")) {
+                        // Add price and quantity to spice
+                        spiceRead.next();
+                        String price = spiceRead.next();
+                        double totalPrice = Double.parseDouble(price.substring(0,
+                                                            price.length() - 1));
+                        spiceRead.next();
+                        spiceRead.next();
+                        String quantity = spiceRead.next();
+                        spice.setQuantity(Integer.parseInt(quantity.substring(0,
+                                                           quantity.length() - 1)));
+                        spice.setPrice(totalPrice / spice.getQuantity());
+                        spiceArray.add(spice);
+                    }
+                } else if (spiceCommand.equals("knapsack")) {
+                    spiceRead.next();
+                    spiceRead.next();
+                    String capacityString = spiceRead.next();
+                    int capacity = Integer.parseInt(capacityString.substring(0, 
+                                                    capacityString.length() - 1));
+                    MarcusKnapsack bag = new MarcusKnapsack(capacity);
+                    bag.fractionalKnapsack(spiceArray);
+                }
+            }
+            spiceRead.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Whoops! Couldn't find spice.txt");
+            e.printStackTrace();
+        }
     }
 }
