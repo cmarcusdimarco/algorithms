@@ -50,7 +50,11 @@ public class MarcusKnapsack {
             if (hasLooped) {
                 System.out.print(", ");
             }
-            System.out.print(spice.getValue() + " scoops of " + spice.getKey());
+            System.out.print(spice.getValue() + " scoop");
+            if (spice.getValue() != 1) {
+                System.out.print("s");
+            }
+            System.out.print(" of " + spice.getKey());
             hasLooped = true;
         }
         System.out.println(".");
