@@ -1,0 +1,842 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CMPT 435
+% Lab One
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from: http://www.LaTeXTemplates.com
+% Original author: % Frits Wenneker (http://www.howtotex.com)
+% License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Modified by Alan G. Labouseur  - alan@labouseur.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letterpaper, 10pt]{article} 
+
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{graphicx}
+\usepackage[lined,linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{listings}
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\usepackage{lastpage}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{multirow}
+
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{page \thepage\ of \pageref{LastPage}} % Page numbering for center footer
+\fancyfoot[R]{}
+
+\definecolor{commentgreen}{rgb}{0, 0.6, 0}
+\definecolor{keywordmagenta}{rgb}{.84, 0.09, 0.41}
+
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{commentgreen},
+    keywordstyle=\color{keywordmagenta},
+    numberstyle=\color{gray},
+    numbers=left,
+    literate={\ \ }{{\ }}1
+}
+
+\lstset{style=mystyle}
+
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+   \normalfont \normalsize 
+   \textsc{CMPT 435 - Fall 2021 - Dr. Labouseur} \\[10pt] % Header stuff.
+   \horrule{0.5pt} \\[0.25cm] 	% Top horizontal rule
+   \huge Assignment Five -- Dynamic \& Greedy Algorithms \\     	    % Assignment title
+   \horrule{0.5pt} \\[0.25cm] 	% Bottom horizontal rule
+}
+
+\author{C. Marcus DiMarco \\ \normalsize C.DiMarco1@Marist.edu}
+
+\date{\normalsize\ December 10, 2021} 	% Today's date.
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%   CONTENT SECTION
+%----------------------------------------------------------------------------------------
+
+% - -- -  - -- -  - -- -  -
+
+\section{Objectives}
+
+\begin{itemize}
+    \item \hspace{0.5em}Create a program that reads a text file in order to create directed, weighted graphs of various numbers of vertices and edges.
+    \item \hspace{0.5em}Print the shortest paths possible from a single source to each vertex in the graph along with the total cost of traversal.
+    \item \hspace{0.5em}Create a program that reads a text file in order to create an instance of the fractional knapsack problem using spices of varying value with weight 1.
+    \item \hspace{0.5em}Print the maximum values that can be held in each knapsack.
+\end{itemize}
+
+\vspace{1.0em}
+
+\section{Conditions}
+
+\begin{itemize}
+    \item \hspace{0.5em}The program must create the relevant Objects by parsing the commands and inputs of the file.
+    \item \hspace{0.5em}The program must distinguish based on the format of the file when an Object has been fully constructed.
+\end{itemize}
+
+\section{Overview - Graphs}
+
+\hspace{1.0em}Our graphing is driven by three classes: MarcusVertex, MarcusEdge and MarcusGraphs.
+
+\subsection{MarcusVertex}
+
+\hspace{1.0em}This custom vertex class is the building block of the graphs. Neighboring vertices are now contained within an ArrayList of edges. Additional changes from the previous iteration include support for tracking cost and a pointer to the previous MarcusVertex for calculating and tracking the shortest path.
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A custom implementation of a vertex object for
+ * representing graphs as linked objects.
+ */
+import java.util.ArrayList;
+
+public class MarcusVertex {
+    private int id;
+    private boolean isProcessed;
+    private ArrayList<MarcusEdge> edges;
+    private MarcusVertex next;
+    private int cost;
+    private MarcusVertex shortestSource;
+
+
+    public MarcusVertex(int id) {
+        this.id = id;
+        this.isProcessed = false;
+        this.edges = new ArrayList<MarcusEdge>();
+        this.next = null;
+        this.cost = 0;
+        this.shortestSource = null;
+    }
+
+    public boolean hasNeighbor(MarcusVertex neighbor) {
+        for (int i = 0; i < edges.size(); i++) {
+            if (edges.get(i).getDestination().getId() == neighbor.getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int weightToVertex(MarcusVertex neighbor) {
+        for (int i = 0; i < edges.size(); i++) {
+            if (edges.get(i).getDestination().getId() == neighbor.getId()) {
+                return edges.get(i).getWeight();
+            }
+        }
+
+        System.out.println("No matching edge found.");
+        return -2112;
+    }
+
+    // Setters and getters for private fields
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean getIsProcessed() {
+        return isProcessed;
+    }
+
+    public void setIsProcessed(boolean isProcessed) {
+        this.isProcessed = isProcessed;
+    }
+
+    public void addEdge(MarcusEdge edge) {
+        if (edge.getSource().id != this.id) {
+            System.out.println("This is not the edge you're looking for...");
+            System.out.println("(Source of edge does not match this vertex)");
+            return;
+        }
+        this.edges.add(edge);
+    }
+
+    public ArrayList<MarcusEdge> getEdges() {
+        return this.edges;
+    }
+
+    public void printNeighbors() {
+        for (MarcusEdge currentEdge : edges) {
+            System.out.print(currentEdge.getDestination().getId() + " ");
+        }
+        System.out.print("\n");
+    }
+
+    public void setNext(MarcusVertex next) {
+        this.next = next;
+    }
+
+    public MarcusVertex getNext() {
+        return this.next;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setShortestSource(MarcusVertex source) {
+        this.shortestSource = source;
+    }
+
+    public MarcusVertex getShortestSource() {
+        return shortestSource;
+    }
+}
+\end{lstlisting}
+
+\subsection{MarcusEdge}
+
+\hspace{1.0em}MarcusEdge is the newest addition to the MarcusGraphing suite. Each MarcusEdge tracks its source, destination and weight.
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A custom representation of edges between vertices to allow for
+ * the adding of weights to a directed graph.
+ */
+
+public class MarcusEdge {
+    private MarcusVertex sourceVertex;
+    private MarcusVertex destinationVertex;
+    private int weight;
+
+    // Default constructor only allows for assignment of weighted edges
+    public MarcusEdge(MarcusVertex source, MarcusVertex destination, int weight) {
+        this.sourceVertex = source;
+        this.destinationVertex = destination;
+        this.weight = weight;
+    }
+
+    // Setters and getters for private fields
+    public void setSource(MarcusVertex source) {
+        this.sourceVertex = source;
+    }
+
+    public MarcusVertex getSource() {
+        return this.sourceVertex;
+    }
+
+    public void setDestination(MarcusVertex destination) {
+        this.destinationVertex = destination;
+    }
+
+    public MarcusVertex getDestination() {
+        return this.destinationVertex;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getWeight() {
+        return this.weight;
+    }
+}
+\end{lstlisting}
+
+\subsection{MarcusGraphs}
+
+\hspace{1.0em}Using MarcusVertex, we can assemble MarcusGraphs - a class which defines the various print and traversal methods needed. For user-friendliness, MarcusGraphs includes a method getVertexById(), which is instrumental in the creation of the edges from the text file. In addition, printMatrix() has been updated for compatibility with weighted graphs for better testing. This is also the container for our singleSourceShortestPath() method, which calculates the shortest path from a source to each vertex by setting each vertex's cost to VERY\_HIGH\_NUMBER and reducing it as it finds a more efficient path.
+
+\vspace{1.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A custom implementation of graphs as an object containing
+ * vertices and edges. Supports matrices, adjacency lists,
+ * and linked objects, as well as both depth-first traversals
+ * and breadth-first traversals.
+ */
+import java.util.ArrayList;
+
+public class MarcusGraphs {
+    private ArrayList<MarcusVertex> vertices;
+    private MarcusVertex initialVertex;
+    private ArrayList<MarcusEdge> edges;
+    private boolean hasBeenPrinted;
+
+    // Default constructor
+    public MarcusGraphs() {
+        this.vertices = new ArrayList<MarcusVertex>();
+        this.initialVertex = null;
+        this.edges = new ArrayList<MarcusEdge>();
+        this.hasBeenPrinted = false;
+    }
+
+    // Prints a matrix of all vertices, printing a 1 at the intersection
+    // if there is an edge present and printing a . if not
+    public void printMatrix() {
+        for (int i = -1; i < vertices.size(); i++) {
+            for (int j = -1; j < vertices.size(); j++) {
+                if (i == -1 && j == -1) {
+                    // Top left corner is blank space
+                    System.out.printf("%3s", "");
+                } else if (i == -1) {
+                    // Top row is vertex IDs
+                    System.out.printf("%3s", vertices.get(j).getId() + " ");
+                } else if (j == -1) {
+                    // First column is vertex IDs
+                    System.out.printf("%3s", vertices.get(i).getId() + " ");
+                } else if (vertices.get(i).hasNeighbor(vertices.get(j))) {
+                    // If the vertices are neighbors, print weight
+                    System.out.printf("%3s",
+                               vertices.get(i).weightToVertex(vertices.get(j)));
+                } else {
+                    // If not neighbors, print .
+                    System.out.printf("%3s", ". ");
+                }
+            }
+            // New line
+            System.out.print("\n\n");
+        }
+    }
+
+    // Prints each vertex followed by its neighbors
+    public void printAdjacencyList() {
+        for (int i = 0; i < vertices.size(); i++) {
+            System.out.print("[" + vertices.get(i).getId() + "] ");
+            vertices.get(i).printNeighbors();
+        }
+        System.out.print("\n");
+    }
+
+    // Traverses a graph vertex-by-vertex, going as deep as possible from
+    // the source before moving on to the next vertex. Prints IDs as
+    // encountered.
+    public void depthFirstTraversal(MarcusVertex source) {
+
+        if (!source.getIsProcessed()) {
+            System.out.print(source.getId() + " ");
+            source.setIsProcessed(true);
+        }
+        for (MarcusEdge currentEdge : source.getEdges()) {
+            if (!currentEdge.getDestination().getIsProcessed()) {
+                depthFirstTraversal(currentEdge.getDestination());
+            }
+        }
+    }
+
+    // Traverses a graph using a queue. Prints IDs as dequeued.
+    public void breadthFirstTraversal(MarcusVertex source) {
+        MarcusVertex currentVertex;
+
+        // Reset booleans from depth-first traversal
+        this.resetBooleans();
+
+        // Enqueue when encountered
+        MarcusQueue queue = new MarcusQueue();
+        queue.enqueue(source);
+        source.setIsProcessed(true);
+        while (!queue.isEmpty()) {
+            currentVertex = queue.dequeue();
+            System.out.print(currentVertex.getId() + " ");
+            for (MarcusEdge each : currentVertex.getEdges()) {
+                if (!each.getDestination().getIsProcessed()) {
+                    queue.enqueue(each.getDestination());
+                    each.getDestination().setIsProcessed(true);
+                }
+            }
+        }
+
+        System.out.print("\n\n");
+    }
+
+    // Find the shortest path between two vertices using Bellman-Ford
+    public void singleSourceShortestPath(MarcusVertex source) {
+        initSSSP(source);
+        for (int i = 0; i < this.vertices.size(); i++) {
+            for (MarcusEdge currentEdge : this.edges) {
+                this.relax(currentEdge.getSource(), currentEdge.getDestination(),
+                           currentEdge.getWeight());
+            }
+        }
+        if (noNegativeLoops()) {
+            System.out.println("SSSP complete!");
+        } else {
+            System.out.println("SSSP failed - negative loop present");
+        }
+    }   
+
+    // Initializes the SSSP algorithm, setting costs to max int value,
+    // clearing paths and setting source cost to 0
+    private void initSSSP(MarcusVertex source) {
+        final int VERY_HIGH_NUMBER = (int) Integer.MAX_VALUE - 6000;
+        for (MarcusVertex vertex : this.vertices) {
+            vertex.setCost(VERY_HIGH_NUMBER);
+            vertex.setShortestSource(null);
+        }
+        source.setCost(0);
+    }
+
+    // Checks if the cost of moving from first to second is lower than
+    // the recorded cost of second
+    private void relax(MarcusVertex first, MarcusVertex second, int weight) {
+        if (second.getCost() > first.getCost() + weight) {
+            second.setCost(first.getCost() + weight);
+            second.setShortestSource(first);
+        }
+    }
+
+    // Private test for negative loops to ensure possible success for SSSP
+    private boolean noNegativeLoops() {
+        for (MarcusEdge current : this.edges) {
+            if (current.getDestination().getCost() >
+                current.getSource().getCost() + current.getWeight()) {
+                    return false;
+                }
+        }
+        return true;
+    }
+
+    // Private method for printing the shortest path from the source
+    // using MarcusStack 
+    private void printPathFromSource(MarcusVertex vertex) {
+        MarcusStack stack = new MarcusStack();
+
+        while (vertex != null) {
+            stack.push(vertex);
+            vertex = vertex.getShortestSource();
+        }
+
+        while(!stack.isEmpty()) {
+            System.out.print(stack.pop().getId());
+            if (!stack.isEmpty()) {
+                System.out.print(" --> ");
+            }
+        }
+
+        System.out.print("\n");
+    }
+
+    // Reset isProcessed for each vertex in the graph
+    public void resetBooleans() {
+        for (MarcusVertex currentVertex : vertices) {
+            currentVertex.setIsProcessed(false);
+        }
+    }
+
+    // Add vertex to ArrayList and set initialVertex if needed
+    public void addVertex(MarcusVertex vertex) {
+        this.vertices.add(vertex);
+        if (this.initialVertex == null) {
+            this.initialVertex = vertex;
+        }
+    }
+
+    public ArrayList<MarcusVertex> getVertices() {
+        return this.vertices;
+    }
+
+    // Add edge to ArrayList
+    public void addEdge(MarcusEdge edge) {
+        this.edges.add(edge);
+    }
+
+    public MarcusVertex getVertexById(int vertexId) {
+        MarcusVertex returnVertex = null;
+
+        for (MarcusVertex currentVertex : vertices) {
+            if (currentVertex.getId() == vertexId) {
+                returnVertex = currentVertex;
+                break;
+            }
+        }
+
+        return returnVertex;
+    }
+
+    public MarcusVertex getInitialVertex() {
+        return initialVertex;
+    }
+
+    public void printSSSP(MarcusVertex source) {
+        for (MarcusVertex current : this.vertices) {
+            if (current.equals(source)) {
+                continue;
+            } else {
+                System.out.print(source.getId() + " --> " + current.getId() +
+                                " cost is " + current.getCost() +
+                                "; path: ");
+                this.printPathFromSource(current);
+            }
+        }
+
+        this.hasBeenPrinted = true;
+    }
+
+    public boolean hasBeenPrinted() {
+        return this.hasBeenPrinted;
+    }
+}
+
+\end{lstlisting}
+
+\vspace{6.0em}
+
+\section{Overview - Fractional Knapsack}
+
+\hspace{1.0em}Our fractional knapsack approach consists of two classes - MarcusSpice and MarcusKnapsack.
+
+\subsection{MarcusSpice}
+
+\hspace{1.0em}MarcusSpice is a simple container for the Spice objects from the text file. Its key methods are isAvailable(), resetQuantity(), and putInKnapsack(), all of which are instrumental in properly tracking availability while retaining original quantity data for the next knapsack.
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A container for a spice involved in a spice heist. From Arrakis in
+ * origin, in my greedy knapsack for destination.
+ */
+public class MarcusSpice {
+    private String name;
+    private double price;
+    private int quantity;
+    private int quantityLeft;
+
+    public MarcusSpice() {
+        this.name = null;
+        this.price = 0;
+        this.quantity = 0;
+        this.quantityLeft = 0;
+    }
+
+    // Constructor based on totalPrice as input
+    public MarcusSpice(String name, double totalPrice, int quantity) {
+        this.name = name;
+        this.price = totalPrice / quantity;
+        this.quantity = quantity;
+        this.quantityLeft = quantity;
+    }
+
+    // Setters and getters for private fields
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return this.price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public boolean isAvailable() {
+        if (quantityLeft != 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void resetQuantity() {
+        this.quantityLeft = this.quantity;
+    }
+
+    public void putInKnapsack() {
+        if (this.quantityLeft != 0){
+            this.quantityLeft--;
+        } else {
+            System.out.println("Oops! 0 remaining.");
+        }
+    }
+}
+
+\end{lstlisting}
+
+\subsection{MarcusKnapsack}
+
+\hspace{1.0em}MarcusKnapsack is a bag full of wonder. It features the fractionalKnapsack() method, which is where all of the magic happens. It resets each spice's quantity to the original level, sorts the spice array by increasing value, then descends down the spice array until it is either full or has exhausted the spices. It features a HashMap to track how many of each spice are held within the knapsack.
+
+\vspace{2.0em}
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A custom class to determine the greediest load of spices
+ * that can be contained within a fractional knapsack of
+ * varying capacities.
+ */
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class MarcusKnapsack {
+    private int capacity;
+    private int value;
+    private int spicesHeld;
+    private HashMap<String, Integer> spiceInventory;
+
+    public MarcusKnapsack(int capacity) {
+        this.capacity = capacity;
+        this.value = 0;
+        this.spicesHeld = 0;
+        spiceInventory = new HashMap<String, Integer>();
+    }
+
+    public void fractionalKnapsack(ArrayList<MarcusSpice> spices) {
+
+        // Reset spice quantities available
+        for (MarcusSpice spice : spices) {
+            spice.resetQuantity();
+        }
+
+        // Ensure acting on spice array sorted by price
+        sortSpices(spices);
+
+        for (int i = spices.size() - 1; i >= 0; i--) {
+            int counter = 0;
+            while (spices.get(i).isAvailable() && this.hasRoom()) {
+                spices.get(i).putInKnapsack();
+                this.addValue(spices.get(i));
+                this.spicesHeld++;
+                counter++;
+                spiceInventory.put(spices.get(i).getName(), counter);
+            }
+        }
+
+        System.out.print("Knapsack of capacity " + this.capacity + " is worth " +
+                            this.value + " quatloos and contains ");
+
+        boolean hasLooped = false;
+
+        for (Map.Entry<String, Integer> spice : spiceInventory.entrySet()) {
+            if (hasLooped) {
+                System.out.print(", ");
+            }
+            System.out.print(spice.getValue() + " scoop");
+            if (spice.getValue() != 1) {
+                System.out.print("s");
+            }
+            System.out.print(" of " + spice.getKey());
+            hasLooped = true;
+        }
+        System.out.println(".");
+}
+
+    public void sortSpices(ArrayList<MarcusSpice> spices) {
+        for (int i = 1; i < spices.size(); i++) {
+            MarcusSpice keySpice = spices.get(i);
+            for (int j = i - 1; j >= 0; j--) {
+                // Move all items larger than key forward 1 index
+                if (keySpice.getPrice() < spices.get(j).getPrice()) {
+                    spices.set(j + 1, spices.get(j));
+                    // If index 0 reached, assign it currentString
+                    if (j == 0) {
+                        spices.set(j, keySpice);
+                    }
+                } else {
+                    // Insert key at index ahead of first smaller element
+                    spices.set(j + 1, keySpice);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Setter and getter for capacity
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return this.value;
+    }
+
+    public void addValue(MarcusSpice spice) {
+        this.value += spice.getPrice();
+    }
+
+    public boolean hasRoom() {
+        if (this.spicesHeld >= this.capacity) {
+            return false;
+        }
+
+        return true;
+    }
+}
+\end{lstlisting}
+
+\section{Assignment5}
+
+\hspace{1.0em}With the classes we have just defined, we are ready to create our program. We'll need some imported libraries: namely, java.io.File to import a file, java.io.FileNotFoundException to account for errors finding the input file, java.util.Scanner to read the file, and java.util.ArrayList to contain the spices in the second half.
+
+\vspace{5.0em}
+
+\begin{lstlisting}[language=Java]
+/**
+ * A program designed to implement the Bellman-Ford dynamic
+ * programming algorithm for Single Source Shortest Path
+ * on directed graphs and to implement a greedy solution to
+ * fractional knapsack.
+ */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Assignment5 {
+    public static void main(String[] args) {
+        // Read graphs2.txt and create matrix, adjacency list, and linked objects
+        try {
+            File graphs = new File("graphs2.txt");
+            Scanner graphRead = new Scanner(graphs);
+            MarcusGraphs graph = null;
+            String command = null;
+            String item = null;
+            while (graphRead.hasNextLine()) {
+                command = graphRead.next();
+                if (command.equals("--")) {
+                // Skip comment if null or if graph has been printed
+                    if (graph == null || graph.hasBeenPrinted()) {
+                        graphRead.nextLine();
+                    } else {
+                        // Run SSSP
+                        graph.singleSourceShortestPath(graph.getInitialVertex());
+                        graph.printSSSP(graph.getInitialVertex());
+                    }
+                } else if (command.equals("new")) {
+                // Create new graph
+                    graph = new MarcusGraphs();
+                    graphRead.nextLine();
+                } else if (command.equals("add")) {
+                    item = graphRead.next();
+                    if (item.equals("vertex")) {
+                    // Add new vertex to graph
+                        MarcusVertex vertex = new MarcusVertex(graphRead.nextInt());
+                        graph.addVertex(vertex);
+                    } else if (item.equals("edge")) {
+                    // Add new edge to graph
+                        int a = graphRead.nextInt();
+                        graphRead.next();
+                        int b = graphRead.nextInt();
+                        int edgeWeight = graphRead.nextInt();
+                        MarcusVertex first = graph.getVertexById(a);
+                        MarcusVertex second = graph.getVertexById(b);
+                        MarcusEdge edge = new MarcusEdge(first, second, edgeWeight);
+                        first.addEdge(edge);
+                        graph.addEdge(edge);
+                    }
+                }
+            }
+            graph.singleSourceShortestPath(graph.getInitialVertex());
+            graph.printSSSP(graph.getInitialVertex());
+            graphRead.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Whoops! Couldn't find graphs2.txt");
+            e.printStackTrace();
+        }
+
+        try {
+            File spices = new File("spice.txt");
+            Scanner spiceRead = new Scanner(spices);
+            String spiceCommand = null;
+            String spiceItem = null;
+            ArrayList<MarcusSpice> spiceArray = new ArrayList<MarcusSpice>();
+            while (spiceRead.hasNextLine()) {
+                spiceCommand = spiceRead.next();
+                if (spiceCommand.equals("--")) {
+                // Skip comment if null
+                    spiceRead.nextLine();
+                } else if (spiceCommand.equals("spice")) {
+                // Create new spice
+                    MarcusSpice spice = new MarcusSpice();
+                    spiceItem = spiceRead.next();
+                    if (spiceItem.equals("name")) {
+                        // Add name to spice
+                        spiceRead.next();
+                        String name = spiceRead.next();
+                        spice.setName(name.substring(0, name.length() - 1));
+                        spiceItem = spiceRead.next();
+                    }
+                    if (spiceItem.equals("total_price")) {
+                        // Add price and quantity to spice
+                        spiceRead.next();
+                        String price = spiceRead.next();
+                        double totalPrice = Double.parseDouble(price.substring(0,
+                                                            price.length() - 1));
+                        spiceRead.next();
+                        spiceRead.next();
+                        String quantity = spiceRead.next();
+                        spice.setQuantity(Integer.parseInt(quantity.substring(0,
+                                                           quantity.length() - 1)));
+                        spice.setPrice(totalPrice / spice.getQuantity());
+                        spiceArray.add(spice);
+                    }
+                } else if (spiceCommand.equals("knapsack")) {
+                    spiceRead.next();
+                    spiceRead.next();
+                    String capacityString = spiceRead.next();
+                    int capacity = Integer.parseInt(capacityString.substring(0, 
+                                                    capacityString.length() - 1));
+                    MarcusKnapsack bag = new MarcusKnapsack(capacity);
+                    bag.fractionalKnapsack(spiceArray);
+                }
+            }
+            spiceRead.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Whoops! Couldn't find spice.txt");
+            e.printStackTrace();
+        }
+    }
+}
+\end{lstlisting}
+
+\section{Results \& Analysis}
+
+\hspace{1.0em}The asymptotic running time of Bellman-Ford's Single Source Shortest Path algorithm is similar to $O(n^2)$, but could be better described as $O(|V*E|)$, where V is the set of all vertices in the graph and E is the set of all edges in the graph. This distinction is important as we need to track the change in the running time due to two inputs instead of just one.
+
+\hspace{1.0em}The asymptotic running time of our greedy approach to fractional knapsack is $O(n)$. This is due to the linear nature of iterating through the array of spices until we have filled the knapsack.
+\end{document}
