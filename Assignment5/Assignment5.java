@@ -20,20 +20,13 @@ public class Assignment5 {
             while (graphRead.hasNextLine()) {
                 command = graphRead.next();
                 if (command.equals("--")) {
-                // Skip comment if null, print and execute methods if exists
-                    if (graph == null) {
+                // Skip comment if null or if graph has been printed
+                    if (graph == null || graph.hasBeenPrinted()) {
                         graphRead.nextLine();
                     } else {
                         // Run SSSP
-                        System.out.println("Matrix:");
-                        graph.printMatrix();
-                        System.out.println("Adjacency list:");
-                        graph.printAdjacencyList();
-                        System.out.println("Depth-first traversal:");
-                        graph.depthFirstTraversal(graph.getInitialVertex());
-                        System.out.print("\n\n");
-                        System.out.println("Breadth-first traversal:");
-                        graph.breadthFirstTraversal(graph.getInitialVertex());
+                        graph.singleSourceShortestPath(graph.getInitialVertex());
+                        graph.printSSSP(graph.getInitialVertex());
                     }
                 } else if (command.equals("new")) {
                 // Create new graph
@@ -53,23 +46,17 @@ public class Assignment5 {
                         int edgeWeight = graphRead.nextInt();
                         MarcusVertex first = graph.getVertexById(a);
                         MarcusVertex second = graph.getVertexById(b);
-                        first.addEdge(new MarcusEdge(first, second, edgeWeight));
-                        
+                        MarcusEdge edge = new MarcusEdge(first, second, edgeWeight);
+                        first.addEdge(edge);
+                        graph.addEdge(edge);
                     }
                 }
             }
-            System.out.println("Matrix:");
-            graph.printMatrix();
-            System.out.println("Adjacency list:");
-            graph.printAdjacencyList();
-            System.out.println("Depth-first traversal:");
-            graph.depthFirstTraversal(graph.getInitialVertex());
-            System.out.print("\n\n");
-            System.out.println("Breadth-first traversal:");
-            graph.breadthFirstTraversal(graph.getInitialVertex());
+            graph.singleSourceShortestPath(graph.getInitialVertex());
+            graph.printSSSP(graph.getInitialVertex());
             graphRead.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Whoops! Couldn't find graphs1.txt");
+            System.out.println("Whoops! Couldn't find graphs2.txt");
             e.printStackTrace();
         }
 
