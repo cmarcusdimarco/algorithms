@@ -7,6 +7,12 @@ public class MarcusSpice {
     private double price;
     private int quantity;
 
+    public MarcusSpice() {
+        this.name = null;
+        this.price = 0;
+        this.quantity = 0;
+    }
+
     // Constructor based on totalPrice as input
     public MarcusSpice(String name, double totalPrice, int quantity) {
         this.name = name;
