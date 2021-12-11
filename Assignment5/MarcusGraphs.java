@@ -10,12 +10,14 @@ public class MarcusGraphs {
     private ArrayList<MarcusVertex> vertices;
     private MarcusVertex initialVertex;
     private ArrayList<MarcusEdge> edges;
+    private boolean hasBeenPrinted;
 
     // Default constructor
     public MarcusGraphs() {
         this.vertices = new ArrayList<MarcusVertex>();
         this.initialVertex = null;
         this.edges = new ArrayList<MarcusEdge>();
+        this.hasBeenPrinted = false;
     }
 
     // Prints a matrix of all vertices, printing a 1 at the intersection
@@ -115,8 +117,9 @@ public class MarcusGraphs {
     // Initializes the SSSP algorithm, setting costs to max int value,
     // clearing paths and setting source cost to 0
     private void initSSSP(MarcusVertex source) {
+        final int VERY_HIGH_NUMBER = (int) Integer.MAX_VALUE - 6000;
         for (MarcusVertex vertex : this.vertices) {
-            vertex.setCost((int) Integer.MAX_VALUE);
+            vertex.setCost(VERY_HIGH_NUMBER);
             vertex.setShortestSource(null);
         }
         source.setCost(0);
@@ -147,7 +150,7 @@ public class MarcusGraphs {
     private void printPathFromSource(MarcusVertex vertex) {
         MarcusStack stack = new MarcusStack();
 
-        while (vertex.getShortestSource() != null) {
+        while (vertex != null) {
             stack.push(vertex);
             vertex = vertex.getShortestSource();
         }
@@ -214,5 +217,11 @@ public class MarcusGraphs {
                 this.printPathFromSource(current);
             }
         }
+
+        this.hasBeenPrinted = true;
+    }
+
+    public boolean hasBeenPrinted() {
+        return this.hasBeenPrinted;
     }
 }
