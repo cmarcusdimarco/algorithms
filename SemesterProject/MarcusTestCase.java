@@ -4,12 +4,10 @@
  */
 
 public class MarcusTestCase {
-    private int id;
     private int cases;
     private int tests;
     
-    public MarcusTestCase(int id) {
-        this.id = id;
+    public MarcusTestCase() {
         this.cases = 0;
         this.tests = 0;
     }
@@ -23,9 +21,6 @@ public class MarcusTestCase {
     }
 
     // Setters and getters for private fields
-    public int getId() {
-        return this.id;
-    }
 
     public void setCases(int cases) {
         this.cases = cases;
