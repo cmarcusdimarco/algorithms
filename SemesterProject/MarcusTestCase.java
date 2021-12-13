@@ -3,36 +3,30 @@
  * as well as methods to test an array of ints for positive cases.
  */
 
-public class MarcusTest {
+public class MarcusTestCase {
+    private int id;
     private int cases;
     private int tests;
     
-    public MarcusTest() {
+    public MarcusTestCase(int id) {
+        this.id = id;
         this.cases = 0;
         this.tests = 0;
     }
 
-    // test() returns 0 if a negative result is detected and 
-    // 1 if a positive result is detected
-    public int test(int individual) {
-        tests++;
-        return individual;
+    public void addCase() {
+        this.cases++;
     }
 
-    // test() returns 1 if a positive is detected and 0
-    // if not
-    public int test(int[] group) {
-        for (int each : group) {
-            if (each != 0) {
-                tests++;
-                return 1;
-            }
-        }
-        tests++;
-        return 0;
+    public void addTests(int quantity) {
+        this.tests += quantity;
     }
 
     // Setters and getters for private fields
+    public int getId() {
+        return this.id;
+    }
+
     public void setCases(int cases) {
         this.cases = cases;
     }
