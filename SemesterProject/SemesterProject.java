@@ -29,29 +29,36 @@ public class SemesterProject {
     public static void main(String[] args) {
         // Initialize primary variables/data structures
         final int POPULATION = Integer.parseInt(args[0]);
-        final double INFECTION_RATE = 0.02;
             // Population size as a constant
+        final double INFECTION_RATE = 0.02;
+            // Infection rate as a constant
+        final int POOL_SIZE = 8;
+            // Pool size to be tested as a constant
         int[] populationArray = new int[POPULATION];
             // Array of population size
+        MarcusTester tester = new MarcusTester();
+            // Tester object
         
         // Infect 2% of array
         for (int i = 0; i < (POPULATION * INFECTION_RATE); i++) {
             populationArray[i] = 1;
         }
 
-        // Shuffle array to represent random distribution
-        notRosannaShuffle(populationArray);
+        // Case 1: Pool of 8 tests negative
+        MarcusTestCase case1 = new MarcusTestCase();
+        // Case 2: Pool of 8 positive, 1/2 subarrays infected
+        MarcusTestCase case2 = new MarcusTestCase();
+        // Case 3: Pool of 8 positive, 2/2 subarrays infected
+        MarcusTestCase case3 = new MarcusTestCase();
 
-        // Implement testing of subarrays of size 8
-            // Case 1: sum of subarrays is 0
-                // Return negative result
-            
-            // Case 2: sum of subarrays is not 0
-                // Test left half and right half
-                    // Case 1: sum of one half is 0
-                        // Return negative result
-                    // Case 2: sum of one half is not 0
-                        // Test each element individually, return result
+        MarcusTestCase[] cases = {
+            case1, case2, case3
+        };
+
+        // Test
+        for (int i = 0; i < populationArray.length; i += POOL_SIZE) {
+            tester.test(cases, populationArray, i, i + POOL_SIZE - 1);
+        }
 
         // Having counted instances of each case, print results
     }
