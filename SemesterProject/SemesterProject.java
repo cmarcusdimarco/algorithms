@@ -74,6 +74,7 @@ public class SemesterProject {
             System.out.printf("%3s", cases[i].getCases());
             System.out.println(" instances requiring " + cases[i].getTests() +
                                " tests");
+            caseNumber++;
         }
     }
 }
