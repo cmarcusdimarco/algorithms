@@ -24,6 +24,7 @@ public class SemesterProject {
             }
         }
     }
+    
     public static void main(String[] args) {
         try {
             // Initialize primary variables/data structures
