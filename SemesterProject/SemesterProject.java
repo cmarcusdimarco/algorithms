@@ -24,87 +24,96 @@ public class SemesterProject {
             }
         }
     }
-    
+
     public static void main(String[] args) {
         try {
             // Initialize primary variables/data structures
             final int POPULATION = Integer.parseInt(args[0]);
                 // Population size as a constant
-            final double INFECTION_RATE = 0.02;
+            if (POPULATION % 1000 == 0) {
+                final double INFECTION_RATE = 0.02;
                 // Infection rate as a constant
-            final int POOL_SIZE = 8;
-                // Pool size to be tested as a constant
-            final int NUM_POOLS = POPULATION / POOL_SIZE;
-                // Number of pools as a constant
-            int[] populationArray = new int[POPULATION];
-                // Array of population size
-            MarcusTester tester = new MarcusTester();
-                // Tester object
-            
-            // Infect 2% of array
-            for (int i = 0; i < (POPULATION * INFECTION_RATE); i++) {
-                populationArray[i] = 1;
-            }
-
-            // Shuffle array
-            notRosannaShuffle(populationArray);
-
-            // Case 1: Pool of 8 tests negative
-            MarcusTestCase case1 = new MarcusTestCase();
-            // Case 2: Pool of 8 positive, 1/2 subarrays infected
-            MarcusTestCase case2 = new MarcusTestCase();
-            // Case 3: Pool of 8 positive, 2/2 subarrays infected
-            MarcusTestCase case3 = new MarcusTestCase();
-
-            MarcusTestCase[] cases = {
-                case1, case2, case3
-            };
-
-            // Test
-            for (int i = 0; i < populationArray.length; i += POOL_SIZE) {
-                tester.test(cases, populationArray, i, i + POOL_SIZE - 1);
-            }
-
-            // Having counted instances of each case, print results
-            int caseNumber = 1;
-            int sumTests = 0;
-            String resultString;
-                // Using String concatenation to print results in order to
-                // track max String length for better formatting of
-                // dashed line separator
-            int stringMaxLength = 0;
-            for (int i = 0; i < cases.length; i++) {
-                resultString = "";
-                resultString += "Case (" + caseNumber + "): ";
-                resultString += NUM_POOLS + " x ";
-                resultString += String.format("%.4f",
-                                cases[i].getPercentage(NUM_POOLS));
-                resultString += " = ";
-                resultString += String.format("%3s", cases[i].getCases());
-                resultString += " instances requiring " + cases[i].getTests() +
-                                " tests";
-                System.out.println(resultString);
-                if (resultString.length() > stringMaxLength) {
-                    stringMaxLength = resultString.length();
+                final int POOL_SIZE = 8;
+                    // Pool size to be tested as a constant
+                final int NUM_POOLS = POPULATION / POOL_SIZE;
+                    // Number of pools as a constant
+                int[] populationArray = new int[POPULATION];
+                    // Array of population size
+                MarcusTester tester = new MarcusTester();
+                    // Tester object
+                
+                // Infect 2% of array
+                for (int i = 0; i < (POPULATION * INFECTION_RATE); i++) {
+                    populationArray[i] = 1;
                 }
-                caseNumber++;
-                sumTests += cases[i].getTests();
-            }
 
-            // Print dashed line separator based on max String length above
-            for (int i = 0; i < stringMaxLength; i++) {
-                System.out.print("-");
-            }
-            System.out.println();
+                // Shuffle array
+                notRosannaShuffle(populationArray);
 
-            // Print conclusion
-            System.out.println(sumTests + " tests to screen a population of " +
-                            POPULATION +
-                            " people for a disease with an infection rate of " +
-                            ((int) (INFECTION_RATE * 100)) +"%");
+                // Case 1: Pool of 8 tests negative
+                MarcusTestCase case1 = new MarcusTestCase();
+                // Case 2: Pool of 8 positive, 1/2 subarrays infected
+                MarcusTestCase case2 = new MarcusTestCase();
+                // Case 3: Pool of 8 positive, 2/2 subarrays infected
+                MarcusTestCase case3 = new MarcusTestCase();
+
+                MarcusTestCase[] cases = {
+                    case1, case2, case3
+                };
+
+                // Test
+                for (int i = 0; i < populationArray.length; i += POOL_SIZE) {
+                    tester.test(cases, populationArray, i, i + POOL_SIZE - 1);
+                }
+
+                // Having counted instances of each case, print results
+                int caseNumber = 1;
+                int sumTests = 0;
+                String resultString;
+                    // Using String concatenation to print results in order to
+                    // track max String length for better formatting of
+                    // dashed line separator
+                int stringMaxLength = 0;
+                for (int i = 0; i < cases.length; i++) {
+                    resultString = "";
+                    resultString += "Case (" + caseNumber + "): ";
+                    resultString += NUM_POOLS + " x ";
+                    resultString += String.format("%.4f",
+                                    cases[i].getPercentage(NUM_POOLS));
+                    resultString += " = ";
+                    resultString += String.format("%3s", cases[i].getCases());
+                    resultString += " instances requiring " + cases[i].getTests() +
+                                    " tests";
+                    System.out.println(resultString);
+                    if (resultString.length() > stringMaxLength) {
+                        stringMaxLength = resultString.length();
+                    }
+                    caseNumber++;
+                    sumTests += cases[i].getTests();
+                }
+
+                // Print dashed line separator based on max String length above
+                for (int i = 0; i < stringMaxLength; i++) {
+                    System.out.print("-");
+                }
+                System.out.println();
+
+                // Print conclusion
+                System.out.println(sumTests + " tests to screen a population of " +
+                                POPULATION +
+                                " people for a disease with an infection rate of " +
+                                ((int) (INFECTION_RATE * 100)) +"%");
+            } else {
+                throw new IllegalArgumentException("Population not divisible " +
+                                                   "by 1000");
+            }
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Oops! Please pass a population divisible by 1000" +
-                               " as an argument to the program!");
+            System.out.println("Oops! Please pass a population divisible by 1000 " +
+                               "as an argument to the program!");
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Oops! Please pass a population divisible by 1000 " +
+                               "as an argument to the program!");
             e.printStackTrace();
         }
         
