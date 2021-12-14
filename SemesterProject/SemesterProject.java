@@ -34,6 +34,8 @@ public class SemesterProject {
             // Infection rate as a constant
         final int POOL_SIZE = 8;
             // Pool size to be tested as a constant
+        final int NUM_POOLS = POPULATION / POOL_SIZE;
+            // Number of pools as a constant
         int[] populationArray = new int[POPULATION];
             // Array of population size
         MarcusTester tester = new MarcusTester();
@@ -60,6 +62,18 @@ public class SemesterProject {
             tester.test(cases, populationArray, i, i + POOL_SIZE - 1);
         }
 
+        // Calculate percentages of each case
+
         // Having counted instances of each case, print results
+        int caseNumber = 1;
+        for (int i = 0; i < cases.length; i++) {
+            System.out.print("Case (" + (caseNumber) + "): ");
+            System.out.print(NUM_POOLS + " x ");
+            System.out.printf("%.4f", cases[i].getPercentage(NUM_POOLS));
+            System.out.print(" = ");
+            System.out.printf("%3s", cases[i].getCases());
+            System.out.println(" instances requiring " + cases[i].getTests() +
+                               " tests");
+        }
     }
 }
