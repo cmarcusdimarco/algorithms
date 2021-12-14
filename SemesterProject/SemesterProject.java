@@ -6,8 +6,6 @@
  * in the group.
  */
 
-// Import necessary libraries
-
 public class SemesterProject {
     // A modified implementation of notRosannaShuffle() to shuffle
     // an array of integers instead of Strings
