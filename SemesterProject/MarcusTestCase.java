@@ -20,8 +20,11 @@ public class MarcusTestCase {
         this.tests += quantity;
     }
 
-    // Setters and getters for private fields
+    public double getPercentage(int numOfGroups) {
+        return (cases * 1.0) / numOfGroups;
+    }
 
+    // Setters and getters for private fields
     public void setCases(int cases) {
         this.cases = cases;
     }
