@@ -46,6 +46,9 @@ public class SemesterProject {
             populationArray[i] = 1;
         }
 
+        // Shuffle array
+        notRosannaShuffle(populationArray);
+
         // Case 1: Pool of 8 tests negative
         MarcusTestCase case1 = new MarcusTestCase();
         // Case 2: Pool of 8 positive, 1/2 subarrays infected
@@ -62,19 +65,41 @@ public class SemesterProject {
             tester.test(cases, populationArray, i, i + POOL_SIZE - 1);
         }
 
-        // Calculate percentages of each case
-
         // Having counted instances of each case, print results
         int caseNumber = 1;
+        int sumTests = 0;
+        String resultString;
+            // Using String concatenation to print results in order to
+            // track max String length for better formatting of
+            // dashed line separator
+        int stringMaxLength = 0;
         for (int i = 0; i < cases.length; i++) {
-            System.out.print("Case (" + (caseNumber) + "): ");
-            System.out.print(NUM_POOLS + " x ");
-            System.out.printf("%.4f", cases[i].getPercentage(NUM_POOLS));
-            System.out.print(" = ");
-            System.out.printf("%3s", cases[i].getCases());
-            System.out.println(" instances requiring " + cases[i].getTests() +
-                               " tests");
+            resultString = "";
+            resultString += "Case (" + caseNumber + "): ";
+            resultString += NUM_POOLS + " x ";
+            resultString += String.format("%.4f", cases[i].getPercentage(NUM_POOLS));
+            resultString += " = ";
+            resultString += String.format("%3s", cases[i].getCases());
+            resultString += " instances requiring " + cases[i].getTests() +
+                            " tests";
+            System.out.println(resultString);
+            if (resultString.length() > stringMaxLength) {
+                stringMaxLength = resultString.length();
+            }
             caseNumber++;
+            sumTests += cases[i].getTests();
         }
+
+        // Print dashed line separator based on max String length above
+        for (int i = 0; i < stringMaxLength; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+
+        // Print conclusion
+        System.out.println(sumTests + " tests to screen a population of " +
+                           POPULATION +
+                           " people for a disease with an infection rate of " +
+                           ((int) (INFECTION_RATE * 100)) +"%");
     }
 }
