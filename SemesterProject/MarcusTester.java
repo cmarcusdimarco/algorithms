@@ -5,7 +5,12 @@
  * the pool until deeper testing is conducted.
  */
 
-public class MarcusTester {   
+public class MarcusTester {
+    
+    // Default constructor
+    public MarcusTester() {
+
+    }
 
     // Abstraction for user - test() takes the array of cases and sample of
     // population, tests on group of size 8. If negative, case1 is
