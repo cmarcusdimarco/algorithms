@@ -1,0 +1,448 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CMPT 435
+% Lab One
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from: http://www.LaTeXTemplates.com
+% Original author: % Frits Wenneker (http://www.howtotex.com)
+% License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Modified by Alan G. Labouseur  - alan@labouseur.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letterpaper, 10pt]{article} 
+
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{graphicx}
+\usepackage[lined,linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{listings}
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\usepackage{lastpage}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{multirow}
+
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{page \thepage\ of \pageref{LastPage}} % Page numbering for center footer
+\fancyfoot[R]{}
+
+\definecolor{commentgreen}{rgb}{0, 0.6, 0}
+\definecolor{keywordmagenta}{rgb}{.84, 0.09, 0.41}
+
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{commentgreen},
+    keywordstyle=\color{keywordmagenta},
+    numberstyle=\color{gray},
+    numbers=left,
+    literate={\ \ }{{\ }}1
+}
+
+\lstset{style=mystyle}
+
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+   \normalfont \normalsize 
+   \textsc{CMPT 435 - Fall 2021 - Dr. Labouseur} \\[10pt] % Header stuff.
+   \horrule{0.5pt} \\[0.25cm] 	% Top horizontal rule
+   \huge Semester Project -- Pooled Testing Simulation \\     	    % Assignment title
+   \horrule{0.5pt} \\[0.25cm] 	% Bottom horizontal rule
+}
+
+\author{C. Marcus DiMarco \\ \normalsize C.DiMarco1@Marist.edu}
+
+\date{\normalsize\ December 14, 2021} 	% Today's date.
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%   CONTENT SECTION
+%----------------------------------------------------------------------------------------
+
+% - -- -  - -- -  - -- -  -
+
+\section{Objectives}
+
+\begin{itemize}
+    \item \hspace{0.5em}Create a program that runs a pooled testing simulation on a given population (which must be divisible by 1000).
+    \item \hspace{0.5em}Identify the 3 cases which may exist in the test results.
+    \item \hspace{0.5em}Print the results of each case along with the percentage of occurrence in the population.
+\end{itemize}
+
+\vspace{1.0em}
+
+\section{Conditions}
+
+\begin{itemize}
+    \item \hspace{0.5em}The program must accept the population size as a command line argument when launching the program.
+    \item \hspace{0.5em}The program must not simply count the instances of each case. It must run an actual simulation of a pooled testing environment and increment for each test used and each case encountered.
+\end{itemize}
+
+\section{Overview}
+
+\hspace{1.0em}Our pooled testing simulator is driven by two classes: MarcusTestCase and MarcusTester.
+
+\subsection{MarcusTestCase}
+
+\hspace{1.0em}This class is a simple container of two private fields which track the number of cases and tests for a given MarcusTestCase. In our full program, we will use an array of this class to represent each of the three possible cases. This class also contains a method to calculate the percentage of the pools that it represents.
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A class to withhold counters of case instances and tests used,
+ * as well as methods to test an array of ints for positive cases.
+ */
+
+public class MarcusTestCase {
+    private int cases;
+    private int tests;
+    
+    public MarcusTestCase() {
+        this.cases = 0;
+        this.tests = 0;
+    }
+
+    public void addCase() {
+        this.cases++;
+    }
+
+    public void addTests(int quantity) {
+        this.tests += quantity;
+    }
+
+    public double getPercentage(int numOfGroups) {
+        return (cases * 1.0) / numOfGroups;
+    }
+
+    // Setters and getters for private fields
+    public void setCases(int cases) {
+        this.cases = cases;
+    }
+
+    public int getCases() {
+        return cases;
+    }
+
+    public void setTests(int tests) {
+        this.tests = tests;
+    }
+
+    public int getTests() {
+        return tests;
+    }
+}
+\end{lstlisting}
+
+\subsection{MarcusTester}
+
+\hspace{1.0em}MarcusTester has no fields of its own. It was necessary to abstract the methods of MarcusTester into their own class in order to accept an array of MarcusTestCase objects as a parameter. The only public method is test(), which conducts the pooled testing simulation using two private methods and a structure inspired by recursion and Merge Sort. By accepting arrays and indices as parameters, test() is able to call poolIsPositive() on the pools' subarrays, allowing for more user-friendliness. Since there is no testing to be done on groups of size 2, we cannot use a true recursive approach, and we instead call testIndividuals() on any subarrays of size 4 which return true for poolIsPositive().
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * An object designed to simulate pooled testing on a group.
+ * Conducts tests in the way we would have to in a real world scenario -
+ * abstracting the individual results and only returning the result of
+ * the pool until deeper testing is conducted.
+ */
+
+public class MarcusTester {
+    
+    // Default constructor
+    public MarcusTester() {
+
+    }
+
+    // Abstraction for user - test() takes the array of cases and sample of
+    // population, tests on group of size 8. If negative, case1 is
+    // incremented and test1 is incremented. If positive, tests on L/R
+    // subarrays. If one of these tests comes back as negative, increment
+    // case 2 and conduct tests on the positive subarray.
+    public void test(MarcusTestCase[] cases, int[] group, int leftIndex,
+                     int rightIndex) {
+        int tests = 1;
+        int caseNumber = 0;
+
+        // Using boolean to represent pooled test, since we will never
+        // be able to determine individual positivity until conducting
+        // individual tests in real world scenario
+        if (poolIsPositive(group, leftIndex, rightIndex)) {
+            int midpoint = (leftIndex + rightIndex) / 2;
+            boolean leftIsPositive = poolIsPositive(group, leftIndex, midpoint);
+            boolean rightIsPositive = poolIsPositive(group, midpoint + 1, rightIndex);
+            tests += 2;
+
+            if (leftIsPositive ^ rightIsPositive) {
+                caseNumber = 1;
+            } else {
+                caseNumber = 2;
+            }
+
+            if (leftIsPositive) {
+                testIndividuals(group, leftIndex, midpoint, cases[caseNumber]);
+            }
+            
+            if (rightIsPositive) {
+                testIndividuals(group, midpoint + 1, rightIndex, cases[caseNumber]);
+            }
+
+            cases[caseNumber].addCase();
+            cases[caseNumber].addTests(tests);
+        } else {
+            cases[caseNumber].addCase();
+            cases[caseNumber].addTests(tests);
+        }
+    }
+
+    // Returns the result of the pooled test as a boolean without shortcircuiting
+    // in order to represent real world conditions
+    private boolean poolIsPositive(int[] group, int leftIndex, int rightIndex) {
+        boolean result = false;
+
+        for (int i = leftIndex; i <= rightIndex; i++) {
+            if (group[i] != 0) {
+                result = true;
+            }
+        }
+        
+        return result;
+    }
+
+    // Iterates through the array from @leftIndex to @rightIndex, incrementing
+    // @instance's test count for each test conducted.
+    private void testIndividuals(int[] group, int leftIndex, int rightIndex,
+                 MarcusTestCase instance) {
+        for (int i = leftIndex; i <= rightIndex; i++) {
+            instance.addTests(1);
+        }
+    }
+}
+
+\end{lstlisting}
+
+\hspace{1.0em}On line 34, we are using the bitwise operator \^{} to represent logical exclusive-or, which will return true if and only if 1 of the 2 statements are true.
+
+\hspace{1.0em}In order to most accurately represent the idea of pooled testing, it was important to not use a return statement on line 63, which would allow for more efficient code. In a real world environment, we are testing the entire pool at once, and using a return statement here would violate the condition of using a single test for the pool since we would be effectively analyzing individual results to determine the positivity of the pool.
+
+\subsection{SemesterProject}
+
+\hspace{1.0em}SemesterProject takes a command line argument of an integer divisible by 1000 and subsequently infects 2\% of a population of that size. It then shuffles the array of the population to represent random distribution of infections and proceeds to test pools of size 8, determining which of three cases the pool belongs to, incrementing the appropriate case and adding the tests to it. Once the whole population has been pool-tested, the results are printed along with the occurrence percentages of each case.
+\hspace{1.0em}The three possible cases are:
+
+\begin{itemize}
+    \item Case 1: 0 infections present in pool
+    \item Case 2: Infections present in 1/2 subpools
+    \item Case 3: Infections present in 2/2 subpools
+\end{itemize}
+
+\begin{lstlisting}[language=Java, firstnumber=1]
+/**
+ * A program which simulates group/pooled testing on a population of 1000,
+ * 10,000, 100,000 and 1,000,000 people for a disease with a 2% infection
+ * rate and a test accuracy of 100%. Testing is in groups of 8 and should
+ * account for 3 possible cases: 0 infections, 1 infection, or 2+ infections
+ * in the group.
+ */
+
+public class SemesterProject {
+    // A modified implementation of notRosannaShuffle() to shuffle
+    // an array of integers instead of Strings
+    public static void notRosannaShuffle(int[] integers) {
+
+        for (int i = integers.length - 1; i >= 0; i--) {
+            // Get random index in the remaining length
+            int randomIndex = (int) Math.floor(Math.random() * i);
+            if (randomIndex == i) {
+                continue;
+            } else {
+                // If the random index is not i, swap their values
+                int tempInt = integers[i];
+                integers[i] = integers[randomIndex];
+                integers[randomIndex] = tempInt;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Initialize primary variables/data structures
+            final int POPULATION = Integer.parseInt(args[0]);
+                // Population size as a constant
+            if (POPULATION % 1000 == 0) {
+                final double INFECTION_RATE = 0.02;
+                    // Infection rate as a constant
+                final int POOL_SIZE = 8;
+                    // Pool size to be tested as a constant
+                final int NUM_POOLS = POPULATION / POOL_SIZE;
+                    // Number of pools as a constant
+                int[] populationArray = new int[POPULATION];
+                    // Array of population size
+                MarcusTester tester = new MarcusTester();
+                    // Tester object
+                
+                // Infect 2% of array
+                for (int i = 0; i < (POPULATION * INFECTION_RATE); i++) {
+                    populationArray[i] = 1;
+                }
+
+                // Shuffle array
+                notRosannaShuffle(populationArray);
+
+                // Case 1: Pool of 8 tests negative
+                MarcusTestCase case1 = new MarcusTestCase();
+                // Case 2: Pool of 8 positive, 1/2 subarrays infected
+                MarcusTestCase case2 = new MarcusTestCase();
+                // Case 3: Pool of 8 positive, 2/2 subarrays infected
+                MarcusTestCase case3 = new MarcusTestCase();
+
+                MarcusTestCase[] cases = {
+                    case1, case2, case3
+                };
+
+                // Test
+                for (int i = 0; i < populationArray.length; i += POOL_SIZE) {
+                    tester.test(cases, populationArray, i, i + POOL_SIZE - 1);
+                }
+
+                // Having counted instances of each case, print results
+                int caseNumber = 1;
+                int sumTests = 0;
+                String resultString;
+                    // Using String concatenation to print results in order to
+                    // track max String length for better formatting of
+                    // dashed line separator
+                int stringMaxLength = 0;
+                for (int i = 0; i < cases.length; i++) {
+                    resultString = "";
+                    resultString += "Case (" + caseNumber + "): ";
+                    resultString += NUM_POOLS + " x ";
+                    resultString += String.format("%.4f",
+                                    cases[i].getPercentage(NUM_POOLS));
+                    resultString += " = ";
+                    resultString += String.format("%3s", cases[i].getCases());
+                    resultString += " instances requiring " + cases[i].getTests() +
+                                    " tests";
+                    System.out.println(resultString);
+                    if (resultString.length() > stringMaxLength) {
+                        stringMaxLength = resultString.length();
+                    }
+                    caseNumber++;
+                    sumTests += cases[i].getTests();
+                }
+
+                // Print dashed line separator based on max String length above
+                for (int i = 0; i < stringMaxLength; i++) {
+                    System.out.print("-");
+                }
+                System.out.println();
+
+                // Print conclusion
+                System.out.println(sumTests + " tests to screen a population of " +
+                                POPULATION +
+                                " people for a disease with an infection rate of " +
+                                ((int) (INFECTION_RATE * 100)) +"%");
+            } else {
+                throw new IllegalArgumentException("Population not divisible " +
+                                                   "by 1000");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Oops! Please pass a population divisible by 1000 " +
+                               "as an argument to the program!");
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Oops! Please pass a population divisible by 1000 " +
+                               "as an argument to the program!");
+            e.printStackTrace();
+        }   
+    }
+}
+\end{lstlisting}
+
+\section{Results}
+
+\begin{center}
+\begin{tabular}{|c||c|c|c|c|}
+    \hline
+    \multicolumn{5}{|c|}{Average Percentage of Cases in Population (5 executions)} \\
+    \hline
+    Population Size & Case 1 & Case2 & Case3 & Total Tests\\
+    \hline\hline
+    \multirow{5}{*}{1,000} & 85.6 & 13.6 & 0.8 & 237 \\
+    & 84.8 & 14.4 & 0.8 & 243 \\
+    & 84.8 & 14.4 & 0.8 & 243 \\
+    & 86.4 & 12.0 & 1.6 & 235 \\
+    & 86.4 & 12.0 & 1.6 & 235 \\
+    \hline
+    Average & 85.60 & 13.28 & 1.12 & 238.6 \\
+    \hline\hline
+    \multirow{5}{*}{10,000} & 84.88 & 14.56 & 0.56 & 2,412 \\
+    & 85.12 & 14.24 & 0.64 & 2,398 \\
+    & 85.28 & 13.76 & 0.96 & 2,402 \\
+    & 85.44 & 13.52 & 1.04 & 2,394 \\
+    & 85.12 & 14.48 & 0.40 & 2,386 \\
+    \hline
+    Average & 85.168 & 14.112 & 0.72 & 2,398.4 \\
+    \hline\hline
+    \multirow{5}{*}{100,000} & 85.040 & 14.392 & 0.568 & 24,004 \\
+    & 85.040 & 14.392 & 0.568 & 24,004 \\
+    & 85.016 & 14.344 & 0.640 & 24,058 \\
+    & 85.160 & 14.208 & 0.632 & 23,946 \\
+    & 85.096 & 14.296 & 0.608 & 23,982 \\
+    \hline
+    Average & 85.0704 & 14.3264 & 0.6032 & 23,998.8 \\
+    \hline\hline
+    \multirow{5}{*}{1,000,000} & 85.0808 & 14.3024 & 0.6168 & 239,978 \\
+    & 85.0568 & 14.3672 & 0.5760 & 239,954 \\
+    & 85.0592 & 14.3712 & 0.5696 & 239,904 \\
+    & 85.0568 & 14.3520 & 0.5912 & 240,030 \\
+    & 85.0856 & 14.2792 & 0.6352 & 240,034 \\
+    \hline
+    Rounded Average & 85.0678 & 14.3344 & 0.5978 & 239,980 \\
+    \hline
+\end{tabular}
+\end{center}
+
+\vspace{4.0em}
+
+\section{Analysis}
+
+\hspace{1.0em}Binomial distribution suggests that since our infection rate is 2\%, 98\% of our population is uninfected and therefore, the probability of choosing a sample of size 8 with no infections will be $0.98^8$, which is 0.85 or 85\%. It would follow that case 2 would have a projected probability of 14.96\% and that case 3 would have a probability of 0.04\%. Our results are shuffled at random, so exact replication of these percentages is not expected, but as we increase the number of tests, our averages should trend towards these percentages.
+
+\hspace{1.0em}However, binomial distribution is based on replacement in the population set. Hypergeometric distribution, which is based on removal of assessed elements in the population set, paints a more accurate picture of what to expect. While the same percentages will initially be true, hypergeometric distribution provides that as we remove elements of a given type (infected or uninfected, in this case), the probability of encountering the opposite type of element rises. This occurs since we are effectively reducing the sample size without reducing the number of possible elements in the complementary set.
+
+\hspace{1.0em}What this also means is that while the probabilities calculated using binomial distribution will not changed based on the population size, the probabilities calculated using hypergeometric distribution will vary slightly as the population size changes. In a population of 1000, our odds of encountering an infection at index 0 are 20/1000. If we do encounter this infection, the odds of the next element being infected are 19/999, or 0.01901902\%. This same scenario in a population of 1,000,000 uses the respective probabilities of 20,000/1,000,000 and 19,999/999,999, the latter being roughly equal to 0.01999902\%. These are notably small differences, resulting in a change of a thousandth of 1 percent when increasing the scale by a thousandfold. For this reason, the results will still appear to be in line with the projections made by the binomial distribution, but as the number of tests increases, the average will trend toward each population size's respective hypergeometric distribution.
+
+\hspace{1.0em}The primary improvement I would make to this project is to introduce a test accuracy of less than 100\% to better reflect real world conditions. My preliminary thought is to set a variable for testAccuracy equal to a percentage - let's say 0.98. Then for each test, a decimal from 0-1 would be randomly chosen, and if the random number is equal to or greater than testAccuracy, the test inverts its result (displaying FALSE when the pool should have returned TRUE or vice versa). The redundancy would be to do a second round of testing and to compare the two rounds. If both rounds provide the same result, then the tests are accepted as accurate. If the two rounds provide different results, a third test is conducted and whichever result matches two of three tests is selected as the correct result.
+\end{document}
+
+% Professor Labouseur,
+%
+% Thank you for a wonderful semester. I greatly look forward to having the opportunity to
+% study under you again, and strongly hope to someday have the opportunity to collaborate
+% with you or work alongside you in some capacity. Your passion for the field is infectious
+% (pun intended) and I hope that I have met and/or exceeded the criteria of making you proud
+% to be my teacher, as I have been very proud to have been your student.
+%
+% All the best,
+% C. Marcus DiMarco
