@@ -32,7 +32,7 @@ public class SemesterProject {
                 // Population size as a constant
             if (POPULATION % 1000 == 0) {
                 final double INFECTION_RATE = 0.02;
-                // Infection rate as a constant
+                    // Infection rate as a constant
                 final int POOL_SIZE = 8;
                     // Pool size to be tested as a constant
                 final int NUM_POOLS = POPULATION / POOL_SIZE;
@@ -115,7 +115,6 @@ public class SemesterProject {
             System.out.println("Oops! Please pass a population divisible by 1000 " +
                                "as an argument to the program!");
             e.printStackTrace();
-        }
-        
+        }   
     }
 }
